@@ -1,0 +1,25 @@
+
+.content{clear:both; margin-top:20px;font-size:14px;border:1px solid #ccc;padding:20px;}
+.content h1{font-size:16px;position: relative;top:-10px;left:3px;width:400px}
+.content-fontright{ display: block; float: right; margin-top:-30px;}
+.content-fontright a{ color:#3399ff; text-decoration: none;}
+.content-fontright a:hover{ color:#20a0e0; text-decoration: underline  ;}
+.content-undline{width:940px; background:#cccccc; height:2px; border:0px solid #cccccc;overflow:hidden;}
+.content-undline span{width:150px;display: block; height:2px; background:#3399ff}
+.contentlist{width:900px;margin:20px auto;}
+.contentlist table tr td{ padding:10px 10px 0 10px;}
+
+.input250px{ width:250px;}
+.fontPrompt{ color:#b2b2b2}
+.btn-a{ display: block; width:200px; height:38px; line-height:38px;border:1px solid #eb7f00; background:#fc9300; text-align: center; color: #FFFFFF; text-decoration: none; font-weight: bold;   }
+.btn-a:hover{background:#fc7100;}
+.font-link{text-decoration: none; color:#3399ff}
+.font-link:hover{text-decoration: underline; color:#3399ff}
+
+ .hookimg { width:128px; margin-left:200px; float:left;   }
+ .hookimg img{ width:128px; height:128px; margin-top:34px;}
+ .content-succe{ width:460px;float:left;  margin-top:20px;  }
+ .content-succe li{ list-style-type: none;line-height:28px; display: block; margin-left:30px; margin-top:15px; }
+
+.rsnotice{ width:490px; margin:100px auto 100px 38%; display: block; color: #666666;}
+.rsnotice li{ list-style-type: none; margin-top:10px;}

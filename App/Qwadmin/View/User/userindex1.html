@@ -1,0 +1,646 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
+    <title>jQuery实现分步注册向导</title>
+    <style type="text/css">
+        *{margin:0;padding:0;list-style-type:none;}
+        a,img{border:0;}
+        body{font:12px/180% Arial, Helvetica, sans-serif, "新宋体";}
+        #wizard {border:5px solid #789;font-size:12px;height:800px;margin:20px auto;width:800px;overflow:hidden;position:relative;-moz-border-radius:5px;-webkit-border-radius:5px;}
+        #wizard .items{width:20000px; clear:both; position:absolute;}
+        #wizard .right{float:right;}
+        #wizard #status{height:35px;background:#123;padding-left:25px !important;}
+        #status li{float:left;color:#fff;padding:10px 30px;}
+        #status li.active{background-color:#369;font-weight:normal;}
+        .input{width:240px; height:18px; margin:10px auto; line-height:20px;text-align:center;}
+        .step{padding:20px 30px;width:800px;float:left;}
+        .page{padding:20px 30px;width:500px;float:left;}
+        .page h3{height:42px; font-size:16px; border-bottom:1px dotted #ccc; margin-bottom:20px; padding-bottom:5px}
+        .page h3 em{font-size:12px; font-weight:500; font-style:normal}
+        .page p{line-height:24px;}
+        .page p label{font-size:14px; display:block;}
+        .btn_nav{height:36px; line-height:36px; margin:20px auto;}
+        .prev,.next{width:100px; height:32px; line-height:32px; border:1px solid #d3d3d3; cursor:pointer}
+
+        /* Border styles */
+        .table-4 thead, #table-4 tr {
+            border-top-width: 1px;
+            border-top-style: solid;
+            border-top-color: rgb(211, 202, 221);
+        }
+        .table-4 {
+            border-bottom-width: 1px;
+            border-bottom-style: solid;
+            border-bottom-color: rgb(211, 202, 221);
+            width: 100%;
+
+        }
+        /* Padding and font style */
+        .table-4 td, #table-4 th {
+            padding: 5px 10px;
+            font-size: 12px;
+            font-family: Verdana;
+            color: rgb(95, 74, 121);
+            width: 20%;
+        }
+        /* Alternating background colors */
+       .table-4 tr:nth-child(even) {
+            background: rgb(223, 216, 232)
+        }
+        .table-4 tr:nth-child(odd) {
+            background: #FFF
+        }
+        /*progressbar*/
+        #progressbar {
+            margin-bottom: 30px;
+            overflow: hidden;
+            /*CSS counters to number the steps*/
+            counter-reset: step;
+            align:center;
+            margin:0 auto;
+            width:800px;
+        }
+        #progressbar li {
+            list-style-type: none;
+            color: black;
+            font-weight:normal;
+            font-size: 14px;
+            width: 20%;
+            float: left;
+            position: relative;
+            text-align:center;
+        }
+        #progressbar li:before {
+            content: counter(step);
+            counter-increment: step;
+            width: 20px;
+            line-height: 20px;
+            display: block;
+            font-size: 10px;
+            color: white;
+            background: #707070;
+            border-radius: 3px;
+            margin: 0 auto 5px auto;
+        }
+        /*progressbar connectors*/
+        #progressbar li:after {
+            content: ' ';
+            width: 100%;
+            height: 2px;
+            background: #707070;
+            position: absolute;
+            left: -50%;
+            top: 9px;
+            z-index: -1; /*put it behind the numbers*/
+        }
+        #progressbar li:first-child:after {
+            /*connector not needed before the first step*/
+            content: none;
+        }
+        /*marking active/completed steps green*/
+        /*The number of the step and the connector before it = green*/
+        #progressbar li.active:before,  #progressbar li.active:after{
+            background: #27AE60;
+            color: white;
+        }
+    </style>
+    <script src="__PUBLIC__/qwadmin/js/jquery-1.9.1.js"  type="text/javascript"></script>
+    <script src="__PUBLIC__/qwadmin/js/allDropDownBox.js" type="text/javascript"></script>
+    <link href="__PUBLIC__/qwadmin/css/global.css" type="text/css" rel="stylesheet" />
+    <link href="__PUBLIC__/qwadmin/css/perfectInf.css" rel="stylesheet" type="text/css" />
+    <link href="__PUBLIC__/qwadmin/css/bscInfrmtn.css" rel="stylesheet" type="text/css" />
+    <link href="__PUBLIC__/qwadmin/css/main.css" rel="stylesheet" type="text/css" />
+    <link href="__PUBLIC__/qwadmin/css/base.css" rel="stylesheet" type="text/css" />
+    <script src="__PUBLIC__/qwadmin/js/plugins.Validate.js"></script>
+    <script src="__PUBLIC__/qwadmin/js/plugins.Validate.add.js"></script>
+    <script src="__PUBLIC__/qwadmin/laydate/laydate.js"></script>
+    <link href="__PUBLIC__/qwadmin/css/perfectInf.css" type="text/css" rel="stylesheet" />
+</head>
+<body>
+<script language="javascript" type="text/javascript">
+    $(function(){
+        var start = {
+            elem: '#start', //选择ID为START的input  
+            format: 'YYYY/MM/DD hh:mm:ss', //自动生成的时间格式  
+            max: '2099-06-16 23:59:59', //最大日期  
+            istime: true, //必须填入时间  
+            istoday: false,  //是否是当天  
+            start: laydate.now(0,"YYYY/MM/DD hh:mm:ss"),  //设置开始时间为当前时间  
+            choose: function(datas){
+                end.min = datas; //开始日选好后，重置结束日的最小日期  
+                end.start = datas //将结束日的初始值设定为开始日  
+            }
+        };
+        var end = {
+            elem: '#end',
+            format: 'YYYY/MM/DD hh:mm:ss',
+            max: '2099-06-16 23:59:59',
+            istime: true,
+            istoday: false,
+            start: laydate.now(0,"YYYY/MM/DD hh:mm:ss"),
+            choose: function(datas){
+                start.max = datas; //结束日选好后，重置开始日的最大日期  
+            }
+        };
+        laydate(start);
+        laydate(end);
+        var show_count = 20;   //要显示的条数
+        // var count = 1;    //递增的开始值，这里是你的ID
+        $("#btn_addtr").click(function () {
+            var length = $("#dynamicTable tbody tr").length;
+                if (length < show_count)    //点击时候，如果当前的数字小于递增结束的条件
+                {
+                    $("#tab11 tbody tr").clone().appendTo("#edutable tbody");   //在表格后面添加一行
+
+                }
+            });
+    })
+    function deltr(opp) {
+        var length = $("#dynamicTable tbody tr").length;
+        //alert(length);
+        if (length < 2) {
+            alert("至少保留一行");
+        } else {
+            $(opp).parent().parent().remove();//移除当前行
+            changeIndex();
+        }
+    }
+    function prev(){
+        var val=$("#quesorder").val();
+        $("#quesorder").attr("value",Number(val)-1);
+        showpage();
+    }
+    function next()
+    {
+        var val=$("#quesorder").val();
+        $("#quesorder").attr("value",Number(val)+1);
+        showpage();
+    }
+    function showpage()
+    {
+        if($("#quesorder").val()!=1)
+        {
+            $("#Button2").css("display","inline");
+        }
+        else
+            $("#Button2").css("display","none");
+        if($("#quesorder").val()==4)
+        {
+            $("#Button3").css("display","none");
+            $("#Button1").css("display","inline");
+        }
+        else
+        {
+            $("#Button3").css("display","inline");
+            $("#Button1").css("display","none");
+        }
+        //$("[title='questionpace']");
+        var s=$(".step");
+        $.each(s,function(i,item){
+            if((i+1)==$("#quesorder").val())
+            {
+                $(item).css("display","block");
+            }
+            else
+            {
+                $(item).css("display","none");
+            }
+        })
+        var listr=$("#status").find("li");
+        $.each(listr,function(i,item){
+            if((i+1)==$("#quesorder").val())
+            {
+                $(item).addClass("active");
+            }
+            else
+            {
+                $(item).removeClass("active");
+            }
+        })
+    }
+</script>
+<form  action="{:U('update')}" method="post">
+    <div id="wizard">
+        <ul id="status">
+            <li  class="active"><strong>1.</strong>基本信息</li>
+            <li ><strong>2.</strong>联系信息</li>
+            <li ><strong>3.</strong>教育情况</li>
+            <li ><strong>4.</strong>培训情况</li>
+            <li ><strong>5.</strong>工作经历</li>
+        </ul>
+        <div class="step" id="p0" style="display:block">
+            <table class="perfect-tab" style="float:left;" >
+                <input type="hidden" name="uid" value="{$member['uid']}">
+                <tr>
+                    <td class="tdL">
+                        姓名：
+                    </td>
+                    <td>
+                        <input class="txt" type="text" name ="name" value="{$personinfo['name']}"/>
+                    </td>
+                    <td>
+                        <span class="cDRed"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdL">
+                        姓名拼音：
+                    </td>
+                    <td>
+                        <input class="txt" type="text" name ="namestring" value="{$personinfo['namestring']}"/>
+                    </td>
+                    <td>
+                        <span class="cDRed"></span
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdL">
+                        性别：
+                    </td>
+                    <td>
+                        <label class="lb"><input type="radio" name="sex"
+                            <if condition="$member['sex'] eq 0">checked="checked" </if> value="0"> 男 </label>
+                        <label><input type="radio" name="sex" <if condition="$member['sex'] eq 1">checked="checked" </if> value="1"> 女</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdL">
+                        身份证号：
+                    </td>
+                    <td>
+                        <input class="txt" type="text" name ="idnumber" value="{$personinfo['idnumber']}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdL">
+                        出生日期：
+                    </td >
+                    <td>
+                        <input name="birthday" id="birthday" class="Wdate txt" type="text" value="<if condition="
+                               $personinfo['birthday'] neq '' ">{$member['birthday']|date="Y-m-d",###}</if>" onClick="laydate()"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdL">
+                        籍贯：
+                    </td>
+                    <td>
+                        <input class="txt" type="text" name ="province" value="{$personinfo['province']}"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="tdL">
+                        民族：
+                    </td>
+                    <td>
+                        <select class="txt sel3 valid" id="fNation" name="fNation">
+                            <option value="4001">汉族</option>
+                            <option value="4002">蒙古族</option>
+                            <option value="4003">回族</option>
+                            <option value="4004">藏族</option>
+                            <option value="4005">朝鲜族</option>
+                            <option value="4006">维吾尔族</option>
+                            <option value="4007">苗族</option>
+                            <option value="4008">壮族</option>
+                            <option value="4009">满族</option>
+                            <option value="4010">布依族</option>
+                            <option value="4011">侗族</option>
+                            <option value="4012">彝族</option>
+                            <option value="4013">瑶族</option>
+                            <option value="4014">白族</option>
+                            <option value="4015">土家族</option>
+                            <option value="4016">哈尼族</option>
+                            <option value="4017">哈萨克族</option>
+                            <option value="4018">傣族</option>
+                            <option value="4019">黎族</option>
+                            <option value="4020">傈僳族</option>
+                            <option value="4021">佤族</option>
+                            <option value="4022">高山族</option>
+                            <option value="4023">畲族</option>
+                            <option value="4024">拉祜族</option>
+                            <option value="4025">水族</option>
+                            <option value="4026">东乡族</option>
+                            <option value="4027">纳西族</option>
+                            <option value="4028">景颇族</option>
+                            <option value="4029">柯尔克孜族</option>
+                            <option value="4030">土族</option>
+                            <option value="4031">达斡尔族</option>
+                            <option value="4032">仫佬族</option>
+                            <option value="4033">羌族</option>
+                            <option value="4034">布朗族</option>
+                            <option value="4035">撒拉族</option>
+                            <option value="4036">毛南族</option>
+                            <option value="4037">仡佬族</option>
+                            <option value="4038">锡伯族</option>
+                            <option value="4039">阿昌族</option>
+                            <option value="4040">普米族</option>
+                            <option value="4041">塔吉克族</option>
+                            <option value="4042">怒族</option>
+                            <option value="4043">乌孜别克族</option>
+                            <option value="4044">京族</option>
+                            <option value="4045">独龙族</option>
+                            <option value="4046">德昂族</option>
+                            <option value="4047">保安族</option>
+                            <option value="4048">鄂温克族</option>
+                            <option value="4049">俄罗斯族</option>
+                            <option value="4050">塔塔尔族</option>
+                            <option value="4051">裕固族</option>
+                            <option value="4052">鄂伦春族</option>
+                            <option value="4053">赫哲族</option>
+                            <option value="4054">门巴族</option>
+                            <option value="4055">珞巴族</option>
+                            <option value="4056">基诺族</option></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdL">
+                        政治面貌：
+                    </td>
+                    <td>
+                        <input class="txt" type="text" name ="political" value="{$personinfo['political']}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdL">
+                        婚姻状况：
+                    </td>
+                    <td>
+                        <input class="txt" type="text" name ="marry" value="{$personinfo['marry']}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdL">
+                        学历：
+                    </td>
+                    <td>
+                        <select class="txt sel3 valid" id="fEducation" name="fEducation">
+                            <option value="3006">初中及以下</option>
+                            <option value="3001">高中</option>
+                            <option value="3002">大专</option>
+                            <option value="3003">本科</option>
+                            <option value="3004">硕士</option><option value="3005">博士及以上</option></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdL">
+                        专业：
+                    </td>
+                    <td>
+                        <input class="txt" type="text" name ="major" value="{$personinfo['phone']}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdL">
+                        所属行业：
+                    </td>
+                    <td>
+                        <input class="txt" type="text" name ="major" value="{$personinfo['phone']}"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="tdL">
+                        照片：
+                    </td>
+                    <td>
+                        <input class="txt" type="text" name ="personphoto" value="{$personinfo['phone']}"/>
+                    </td>
+                    <td>
+                        <span class="cDRed"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdL">
+                        证书照片：
+                    </td>
+                    <td>
+                        <input class="txt" type="text" name ="certificatephoto" value="" value="{$personinfo['phone']}"/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="step" id="p1" style="display:none">
+
+            <table class="perfect-tab" style="float:left;" >
+                <tr>
+                    <td class="tdL">
+                        固定电话：
+                    </td>
+                    <td>
+                        <input class="txt" type="text" name ="tel" value="{$personinfo['phone']}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdL">
+                        手机号码：
+                    </td>
+                    <td>
+                        <input class="txt" type="text" name ="phone" value="{$personinfo['phone']}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdL">
+                        联系地址：
+                    </td>
+                    <td>
+                        <input class="txt" type="text" name ="address" value="{$personinfo['phone']}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdL">
+                        电子邮箱：
+                    </td>
+                    <td>
+                        <input class="txt" type="text" name ="email" value="{$personinfo['phone']}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdL">
+                        传真：
+                    </td>
+                    <td>
+                        <input class="txt" type="text" name ="fax" value="{$personinfo['phone']}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdL">
+                        邮编：
+                    </td>
+                    <td>
+                        <input class="txt" type="text" name ="zipcode" value="{$personinfo['phone']}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdL">
+                        单位名称：
+                    </td>
+                    <td>
+                        <input class="txt" type="text" name ="companyaddress" value="{$personinfo['phone']}"/>
+                    </td>
+                    <td>
+                        <span class="cDRed"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdL">
+                        单位地址：
+                    </td>
+                    <td>
+                        <input class="txt" type="text" name ="companyaddress" value="{$personinfo['phone']}"/>
+                    </td>
+                    <td>
+                        <span class="cDRed"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdL">
+                        单位邮编：
+                    </td>
+                    <td>
+                        <input class="txt" type="text" name ="companyzipcode" value="{$personinfo['phone']}"/>
+                    </td>
+                    <td>
+                        <span class="cDRed"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdL">
+                        单位电话：
+                    </td>
+                    <td>
+                        <input class="txt" type="text" name ="companytel" value="{$personinfo['phone']}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdL">
+                        单位传真：
+                    </td>
+                    <td>
+                        <input class="txt" type="text" name ="companyfax" value="{$personinfo['phone']}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdL">
+                        单位邮箱：
+                    </td>
+                    <td>
+                        <input class="txt" type="text" name ="companyemail" value="{$personinfo['phone']}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdL">
+                        单位网址：
+                    </td>
+                    <td>
+                        <input class="txt" type="text" name ="companyinter" value="{$personinfo['phone']}"/>
+                    </td>
+                </tr>
+
+            </table>
+
+        </div>
+        <div class="step" id="p2" style="display:none">
+            <table id="tab11"  class="table-4" style="display: none">
+                <tbody>
+                <tr>
+                    <td align="center" >
+                        <input type="text" name="starttime" /></td>
+                    <td align="center" >
+                        <input type="text" name="endtime" /></td>
+                    <td align="center" >
+                        <input type="text" name="academic" /></td>
+                    <td align="center" >
+                        <input type="text" name="school" /></td>
+                    <td>
+                    <td align="center" >
+                        <input type="text" name="major" /></td>
+                       <td> <input type="button" id="Buttonnode1" onClick="deltr(this)" value="删行">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <input type="button"  id="btn_addtr" value="增行">
+            <table id="edutable"  class="table-4" style="float:left;" >
+                <thead>
+                <tr>
+                    <td align="center" >开始时间</td>
+                    <td align="center" >结束时间</td>
+                    <td align="center" >学历</td>
+                    <td align="center" >学校</td>
+                    <td align="center" >专业</td>
+                    <td></td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td align="center" >
+                        <input type="text" name="starttime" style="width: 40px"/></td>
+                    <td align="center">
+                        <input type="text" name="endtime" style="width: 40px"/></td>
+                    <td align="center">
+                        <input type="text" name="academic"style="width: 40px" /></td>
+                    <td align="center">
+                        <input type="text" name="school" style="width: 40px"/></td>
+                    <td>
+                    <td align="center">
+                        <input type="text" name="major" style="width: 40px"/></td>
+                    <td>
+                        <input type="button" id="Buttonnode2" onClick="deltr(this)" value="删行">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="input">
+            <input type="button" id="Button2" class="prev" style="float:left" value="&laquo;上一步" onclick="prev()" style="display: none"/>
+            <input type="button" id="Button3" class="next right" value="下一步&raquo;" onclick="next()"/>
+            <input type="submit" id="Button1" class="next right" id="sub" value="提交"  style="display: none"/>
+            <input type="hidden" id="quesorder" value="1" />
+        </div>
+
+    </div>
+
+    </div>
+</form>
+
+<script type="text/javascript">
+    $(function(){
+
+        $("#wizard").scrollable({
+            onSeek: function(event,i){
+                $("#status li").removeClass("active").eq(i).addClass("active");
+            },
+            onBeforeSeek:function(event,i){
+                if(i==1){
+                    var user = $("#user").val();
+                    if(user==""){
+                        alert("请输入用户名！");
+                        return false;
+                    }
+                    var pass = $("#pass").val();
+                    var pass1 = $("#pass1").val();
+                    if(pass==""){
+                        alert("请输入密码！");
+                        return false;
+                    }
+                    if(pass1 != pass){
+                        alert("两次密码不一致！");
+                        return false;
+                    }
+                }
+            }
+        });
+
+        $("#sub").click(function(){
+            var data = $("form").serialize();
+            alert(data);
+        });
+
+    });
+</script>
+
+</body>
+</html>

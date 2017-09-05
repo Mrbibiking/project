@@ -1,0 +1,197 @@
+<include file="Public/head"/>
+<body class="no-skin">
+<include file="Public/header"/>
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {
+        }
+    </script>
+
+    <include file="Public/sidebar"/>
+    <div class="main-content">
+        <div class="main-content-inner">
+            <!-- #section:basics/content.breadcrumbs -->
+            <include file="Public/breadcrumbs"/>
+
+            <!-- /section:basics/content.breadcrumbs -->
+            <div class="page-content">
+                <!-- /section:settings.box -->
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- PAGE CONTENT BEGINS -->
+                        <div class="row">
+                            <form class="form-inline" action="" method="get">
+                                <if condition="$role eq 1 or $role eq 8">   <a class="btn btn-primary btn-sm" href="{:U('add')}" value="">添加</a></if>
+                                <div class="form-group"><label class="inline">用户查询：</label></div>
+                                <div class="form-group"><select name="field" class="form-control">
+                                    <option <if condition="I('field') eq Name">selected</if> value="name">姓名</option>
+                                    <option <if condition="I('field') eq FullName">selected</if> value="fullname">姓名拼音</option>
+                                    <option <if condition="I('field') eq Mobile">selected</if> value="mobile">手机</option>
+                                    <option <if condition="I('field') eq Idnumber">selected</if> value="idnumber">身份证号</option>
+                                    <option <if condition="I('field') eq Classno">selected</if> value="classno">培训班次</option>
+                                    <option <if condition="I('field') eq Institution">selected</if> value="institution">培训机构</option>
+                                </select></div>
+                                <div class="form-group"> <input type="text" name="keyword" value="{:I(keyword)}" class="form-control"></div>
+                                <div class="form-group"> <button type="submit" class="btn btn-purple btn-sm">
+                                    <span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
+                                    查询
+                                </button></div>
+                            </form>
+                        </div>
+                        <div class="space-4"></div>
+                        <div class="row">
+                            <form id="form" method="post" action="{:U('del')}">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th class="center"><input class="check-all" type="checkbox" value=""></th>
+                                        <th>姓名</th>
+                                        <th class="center">姓名拼音</th>
+                                        <th class="center">性别</th>
+                                        <th>籍贯</th>
+                                        <th>身份证号</th>
+                                        <th>手机</th>
+                                        <th>邮箱</th>
+                                        <if condition="$role eq 1 or $role eq 8">  <th class="center">操作</th></if>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <style>
+                                        .grouptd {
+                                            position: relative;
+                                        }
+                                        .group {
+                                            display: inline-block;
+                                            width: 100%;
+                                        }
+                                        .groupselect {
+                                            position: absolute;
+                                            top: 0;
+                                            left: 0;
+                                            width: 100%;
+                                            height: 100%;
+                                            border: 0;
+                                        }
+                                    </style>
+                                    <volist name="list" id="val">
+                                        <tr>
+                                            <td class="center">
+                                                <input class="uids" type="checkbox" name="uids[]" value="{$val['personnelid']}">
+                                            </td>
+                                            <td>{$val['name']}</td>
+                                            <td>{$val['fullname']}</td>
+                                            <td class="center"><?php if($val['gender']==1){echo '男';}elseif($val['gender']==2){echo '女';} ?></td>
+                                            <td>{$val['placeoforigin']}</td>
+                                            <td>{$val['idnumber']}</td>
+                                            <td>{$val['mobile']}</td>
+                                            <td>{$val['email']}</td>
+                                            <if condition="$role eq 1 or $role eq 8"><td class="center"><a href="{:U('edit',array('uid'=>$val['personnelid']))}">修改</a>
+                                                <a class="del" href="javascript:;" val="{:U('del',array('uids'=>$val['personnelid']))}"
+                                                   title="删除">删除</a>
+                                            </td></if>
+                                        </tr>
+                                    </volist>
+                                    </tbody>
+                                </table>
+                            </form>
+                            <if condition="$role eq 1 or $role eq 8"><div class="cf">
+                                <input id="submit" class="btn btn-primary btn-sm" type="button" value="删除">
+                            </div></if>
+                            {$page}
+                        </div>
+                        <!-- PAGE CONTENT ENDS -->
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+    <include file="Public/footer"/>
+
+</div><!-- /.main-container -->
+
+<include file="Public/footerjs"/>
+
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
+    $(function () {
+        $(".check-all").click(function () {
+            $(".uids").prop("checked", this.checked);
+        });
+        $(".uids").click(function () {
+            var option = $(".ids");
+            option.each(function (i) {
+                if (!this.checked) {
+                    $(".check-all").prop("checked", false);
+                    return false;
+                } else {
+                    $(".check-all").prop("checked", true);
+                }
+            });
+        });
+        $("#submit").click(function () {
+            bootbox.confirm({
+                title: "系统提示",
+                message: "是否要删除所选用户？",
+                callback: function (result) {
+                    if (result) {
+                        $("#form").submit();
+                    }
+                },
+                buttons: {
+                    "cancel": {"label": "取消"},
+                    "confirm": {
+                        "label": "确定",
+                        "className": "btn-danger"
+                    }
+                }
+            });
+        });
+        $(".del").click(function () {
+            var url = $(this).attr('val');
+            bootbox.confirm({
+                title: "系统提示",
+                message: "是否要删除该用户?",
+                callback: function (result) {
+                    if (result) {
+                        window.location.href = url;
+                    }
+                },
+                buttons: {
+                    "cancel": {"label": "取消"},
+                    "confirm": {
+                        "label": "确定",
+                        "className": "btn-danger"
+                    }
+                }
+            });
+        });
+$('#institutionid').change(function(){
+    var   value = $(this).val();
+        $.ajax({
+            url: "__CONTROLLER__/classselect/",
+            type: "POST",
+            dataType: "Text",
+            success: function(data){
+                data = JSON.stringify(data);
+                $("#classid").empty();
+                var count = data.length;
+                var i = 0;
+                var b="";
+                for(i=0;i<count;i++){
+                    b+="<option value='"+data[i].id+"'>"+data[i].classname+"</option>";
+                }
+                $("#classid").append(b);
+            },
+            error: function(){
+                alert("获取操作员信息失败");
+            }
+        });
+
+            });
+
+})
+</script>
+</body>
+</html>

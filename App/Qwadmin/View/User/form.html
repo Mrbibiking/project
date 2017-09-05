@@ -1,0 +1,1025 @@
+<include file="Public/head"/>
+<style type="text/css">
+    /**********************添加代码部分（使一行居中）*************************/
+    .col-center-block {
+        float: none;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 0px;
+    }
+
+    #table0  td{
+        font-size: 13px !important;
+        vertical-align: middle !important;
+    }
+    #table0  th{background-color: #F7F7F7;
+        text-align: right !important;
+        font-size: 13px !important;
+        color: #707070 !important;
+        vertical-align: middle !important;
+    }
+
+    #table1  td{
+        font-size: 13px !important;
+        vertical-align: middle !important;
+    }
+    #table1  th{background-color: #F7F7F7;
+        text-align: right !important;
+        font-size: 13px !important;
+        color: #707070 !important;
+        vertical-align: middle !important;
+    }
+    #table4  td{
+        font-size: 13px !important;
+        vertical-align: middle !important;
+    }
+    #table4  th{background-color: #F7F7F7;
+        text-align: right !important;
+        font-size: 13px !important;
+        color: #707070 !important;
+        vertical-align: middle !important;
+    }
+
+    #table5  td{
+        font-size: 13px !important;
+        vertical-align: middle !important;
+    }
+    #table5  th{background-color: #F7F7F7;
+        text-align: center !important;
+        font-size: 13px !important;
+        color: #707070 !important;
+        vertical-align: middle !important;
+    }
+    /************************************************************/
+    *{margin:0;padding:0;list-style-type:none;}
+    a,img{border:0;}
+    body{font:12px/180% Arial, Helvetica, sans-serif, "新宋体";}
+    #wizard {border:1px solid #789;font-size:12px;height:auto;margin:10px auto;width:90%;osition:relative;-moz-border-radius:5px;-webkit-border-radius:5px;}
+    #wizard .items{width:20000px; clear:both; position:absolute;}
+    #wizard .right{float:right;}
+    #wizard #status{height:35px;background:#555555;padding-left:25px !important;}
+    #status li{float:left;color:#fff;padding:10px 30px;}
+    #status li.active{background-color:#2B7DBC;font-weight:normal;}
+    .input{width:240px; height:18px; margin:10px auto; line-height:20px;text-align:center;}
+    .step{padding:20px 30px;width:100%;}
+    .page{padding:20px 30px;width:500px;float:left;}
+    .page h3{height:42px; font-size:16px; border-bottom:1px dotted #ccc; margin-bottom:20px; padding-bottom:5px}
+    .page h3 em{font-size:12px; font-weight:500; font-style:normal}
+    .page p{line-height:24px;}
+    .page p label{font-size:14px; display:block;}
+    .btn_nav{height:36px; line-height:36px; margin:20px auto;}
+    .prev,.next{width:100px; height:32px; line-height:32px; border:1px solid #d3d3d3; cursor:pointer}
+</style>
+<script src="__PUBLIC__/qwadmin/js/allDropDownBox.js" type="text/javascript"></script>
+<link href="__PUBLIC__/qwadmin/css/global.css" type="text/css" rel="stylesheet" />
+<link href="__PUBLIC__/qwadmin/css/perfectInf.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/qwadmin/css/bscInfrmtn.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/qwadmin/css/main.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/qwadmin/css/base.css" rel="stylesheet" type="text/css" />
+<script src="__PUBLIC__/qwadmin/js/plugins.Validate.js"></script>
+<script src="__PUBLIC__/qwadmin/js/plugins.Validate.add.js"></script>
+<script src="__PUBLIC__/qwadmin/js/jquery-1.11.0.min.js"></script>
+<script src="__PUBLIC__/qwadmin/js/fm.validator.js"></script>
+
+<script src="__PUBLIC__/qwadmin/My97DatePicker/WdatePicker.js"></script>
+<link href="__PUBLIC__/qwadmin/css/perfectInf.css" type="text/css" rel="stylesheet" />
+<body class="no-skin">
+<include file="Public/header"/>
+
+<div class="main-container" id="main-container">
+    <include file="Public/sidebar"/>
+    <div class="main-content">
+        <div class="main-content-inner">
+            <!-- #section:basics/content.breadcrumbs -->
+            <include file="Public/breadcrumbs"/>
+            <!-- /section:basics/content.breadcrumbs -->
+            <div class="page-content">
+                <!-- /section:settings.box -->
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- PAGE CONTENT BEGINS -->
+                            <div id="wizard">
+                                <ul id="status">
+                                    <li  <if condition="$flag eq 1 or $flag eq ''">class="active" </if>style="cursor: pointer"><strong>1.</strong>人员基本信息</li>
+                                    <li <if condition="$flag eq 2">class="active" </if> style="cursor: pointer"><strong>2.</strong>工作经历</li>
+                                    <li <if condition="$flag eq 3">class="active" </if> style="cursor: pointer"><strong>3.</strong>教育经历</li>
+                                    <li <if condition="$flag eq 4">class="active" </if> style="cursor: pointer"><strong>4.</strong>考试及证书</li>
+                                    <li <if condition="$flag eq 5">class="active" </if> style="cursor: pointer"><strong>5.</strong>其他获证情况</li>
+                                    <li <if condition="$flag eq 6">class="active" </if> style="cursor: pointer"><strong>6.</strong>评价人意见</li>
+                                    <li <if condition="$flag eq 7">class="active" </if> style="cursor: pointer"><strong>7.</strong>附件上传</li>
+                                </ul>
+                                <input type="hidden" id="flag" name="flag" value="{$flag}">
+                                <input type="hidden" name="uid" value="{$uid}">
+
+                                <form class="validator"  action="{:U('update_base_info',array('uid'=>$uid))}" id="form1" method="post">
+                                <div class="step" id="p0" <if condition="$flag neq 1 and $flag neq '' ">style="display:none"</if>>
+                                    <div>
+                                    <input type="submit" class="btn btn-primary btn-sm" style="margin-right:80px; float: right;" id="save0" value="保存">
+                                       </div><br/><br/>
+                                    <div class="xian "style="width:100%;margin-bottom:5px;padding:0 200px; border-top:1px solid #ddd" ></div>
+                                    <div class="view" style="vertical-align: middle">
+                                        <span style="font-size: 15px; font-weight: bold"><i class="fa fa-address-book-o" aria-hidden="true"></i>&nbsp;&nbsp;基本信息</span></div>
+                                    <div class="xian "style="width:100%; margin-top:5px;margin-bottom:10px;padding:0 200px; border-top:1px solid #ddd" ></div>
+                                    <table id="table0" class="table table-condensed table-bordered" style="font-size: 20px; width: 90%;">
+                                        <input type="hidden" name="utype" value="0">
+                                        <tr>
+                                            <th class="col-md-2">
+                                                姓名：
+                                            </th>
+                                            <td class="col-md-4">
+                                                <input class="txt" data-required type="text" name ="realname" value="{$basic_info['realname']}"/>
+                                            </td>
+                                            <th class="col-md-2">
+                                                姓名拼音：
+                                            </th>
+                                            <td class="col-md-4">
+                                                <input class="txt" type="text" name ="name_spelling" value="{$basic_info['name_spelling']}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="tdL" >
+                                                性别：
+                                            </th>
+                                            <!--<td >-->
+                                                <!--<label class="lb"><input type="radio" name="gender"-->
+                                                    <!--<if condition="$basic_info['gender'] eq 0"> checked="checked"</if> value="0"> 男 </label>-->
+                                                <!--<label><input type="radio" data-required name="gender" <if condition="$basic_info['gender'] eq 1">checked="checked" </if> value="1"> 女</label>-->
+                                            <!--</td>-->
+                                            <td >
+                                                <select class="txt sel3 valid" data-required id="gender" name="gender">
+                                                    <option value= 0 <if condition="$basic_info['gender'] eq 0">selected="selected" </if> >男</option>
+                                                    <option value= 1 <if condition="$basic_info['gender'] eq 1">selected="selected" </if> >女</option>
+                                                </select>
+                                            </td>
+                                            <th class="tdL" >
+                                                民族：
+                                            </th>
+                                            <td >
+                                                <input class="txt" type="text" name ="nation" value="{$basic_info['nation']}"/>
+                                            </td>
+                                            <!--<th class="tdL">-->
+                                                <!--年龄：-->
+                                            <!--</th >-->
+                                            <!--<td>-->
+                                                <!--<input class="txt" data-required data-type="digits" type="text" name ="age" value="{$basic_info['age']}" style="width: 50px;"/>-->
+                                            <!--</td>-->
+                                        </tr>
+                                        <tr>
+                                            <th class="tdL">
+                                                出生日期：
+                                            </th >
+                                            <td >
+                                                <input class="txt" name="birthday" value="<if condition="$basic_info['birthday'] neq ''">{$basic_info['birthday']|date="Y-m-d",###}</if>"
+                                                type="text" data-date-format="dd-mm-yyyy" readonly="readonly"  onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                                            </td>
+                                            <th class="tdL">
+                                                政治面貌：
+                                            </th>
+                                            <td >
+                                                <input class="txt" type="text" name ="political_status" value="{$basic_info['political_status']}"/>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <th class="tdL" >
+                                                证件类型：
+                                            </th>
+                                            <td >
+                                                <?php
+                                                    echo '<select class="txt sel3 valid" data-required id="id_type_number" name="id_type_number">';
+                                                    foreach($id_type as $key => $val){
+                                                        if($key == $basic_info['id_type_number'])
+                                                            echo "<option value='$key' selected>$val</option>";
+                                                        else
+                                                            echo "<option value='$key' >$val</option>";
+                                                    }
+                                                    echo '<select>';
+                                                ?>
+                                                <!--<select class="txt sel3 valid" data-required id="id_type_number" name="id_type_number">-->
+                                                    <!--<option value="1"  <if condition="$basic_info['id_type_number'] eq 1">selected="selected" </if> >身份证</option>-->
+                                                    <!--<option value="2" <if condition="$basic_info['id_type_number'] eq 2">selected="selected" </if> >军官证</option>-->
+                                                    <!--<option value="3" <if condition="$basic_info['id_type_number'] eq 3">selected="selected" </if> >护照</option>-->
+                                                <!--</select>-->
+                                            </td>
+                                            <th class="tdL">
+                                                证件号码：
+                                            </th>
+                                            <td >
+                                                <input class="txt" data-required type="text" name ="id_number" value="{$basic_info['id_number']}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="tdL" >
+                                                籍贯：
+                                            </th>
+                                            <td >
+                                                <input class="txt" data-required type="text" name ="place_of_origin" value="{$basic_info['place_of_origin']}"/>
+                                            </td>
+                                            <th class="tdL" >
+                                                国家或地区：
+                                            </th>
+                                            <td >
+                                                <input class="txt" data-required type="text" name ="country_or_region" value="{$basic_info['country_or_region']}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="tdL" >
+                                                婚姻状况：
+                                            </th>
+                                            <td >
+                                                <select class="txt sel3 valid" data-required id="marital_status" name="marital_status">
+                                                    <option value= 0 <if condition="$basic_info['marital_status'] eq 0">selected="selected" </if> >未婚</option>
+                                                    <option value= 1 <if condition="$basic_info['marital_status'] eq 1">selected="selected" </if> >已婚</option>
+                                                </select>
+                                            </td>
+
+                                            <th class="tdL">
+                                                最高学历：
+                                            </th>
+                                            <td>
+                                                <input class="txt" data-required type="text" name ="highest_education" value="{$basic_info['highest_education']}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="tdL">
+                                                专业：
+                                            </th>
+                                            <td>
+                                                <input class="txt" data-required type="text" name ="professional" value="{$basic_info['professional']}"/>
+                                            </td>
+                                            <!--<th class="tdL">-->
+                                                <!--所属行业：-->
+                                            <!--</th>-->
+                                            <!--<td>-->
+                                                <!--<input class="txt" data-required type="text" name ="industry" value="{$basic_info['industry']}"/>-->
+                                            <!--</td>-->
+                                            <th class="tdL">
+                                                现工作单位：
+                                            </th>
+                                            <td>
+                                                <input class="txt" data-required type="text" name ="present_work_unit" value="{$basic_info['present_work_unit']}"/>
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                    <div class="xian "style="width:100%;margin-bottom:5px;padding:0 200px; border-top:1px solid #ddd" ></div>
+                                    <div class="view" style="vertical-align: middle">
+                                        <span style="font-size: 15px; font-weight: bold"><i class="fa fa-address-card-o" aria-hidden="true"></i>&nbsp;&nbsp;联系信息</span></div>
+                                    <div class="xian "style="width:100%; margin-top:5px;margin-bottom:10px;padding:0 200px; border-top:1px solid #ddd" ></div>
+                                    <table id="table1" class="table table-condensed table-bordered" style="width:90%" >
+                                        <tr>
+                                            <th class="col-md-2">
+                                                固定电话：
+                                            </th>
+                                            <td class="col-md-4">
+                                                <input class="txt" data-type="digits" data-min=7  type="text" name ="fixed_phone" value="{$contact_info['fixed_phone']}"/>
+                                            </td>
+                                            <th class="col-md-2">
+                                                手机号码：
+                                            </th>
+                                            <td class="col-md-4">
+                                                <input class="txt" data-required data-type="digits" data-min=11 type="text" name ="mobile_phone" value="{$contact_info['mobile_phone']}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="tdL">
+                                                电子邮箱：
+                                            </th>
+                                            <td>
+                                                <input class="txt"  data-required data-type="email" type="text" name ="email" value="{$contact_info['email']}"/>
+                                            </td>
+                                            <th class="tdL">
+                                                传真：
+                                            </th>
+                                            <td>
+                                                <input class="txt"  data-type="number" data-min=7 type="text" name ="fax" value="{$contact_info['fax']}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="tdL">
+                                                当前联系地址：
+                                            </th>
+                                            <td>
+                                                <input class="txt"  data-required type="text" name ="contact_address" value="{$contact_info['contact_address']}"/>
+                                            </td>
+                                            <th class="tdL">
+                                                邮编：
+                                            </th>
+                                            <td>
+                                                <input class="txt" data-type="digits" data-min=6 data-max=6 type="text" name ="zip_code" value="{$contact_info['zip_code']}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="tdL">
+                                                社交账号种类：
+                                            </th>
+                                            <td>
+                                                <?php
+                                                    echo '<select class="txt sel3 valid" data-required id="account_type_number" name="account_type_number">';
+                                                    foreach($account_type as $key => $val){
+                                                        if($key == $contact_info['account_type_number'])
+                                                            echo "<option value='$key' selected>$val</option>";
+                                                        else
+                                                            echo "<option value='$key' >$val</option>";
+                                                }
+                                                    echo '<select>';
+                                                ?>
+                                                <!--<select class="txt sel3 valid" data-required id="account_type_number" name="account_type_number">-->
+                                                    <!--<option value= 0 <if condition="$contact_info['account_type_number'] eq 0">selected="selected" </if> >QQ</option>-->
+                                                    <!--<option value= 1 <if condition="$contact_info['account_type_number'] eq 1">selected="selected" </if> >微信</option>-->
+                                                <!--</select>-->
+                                            </td>
+                                            <th class="tdL">
+                                                社交账号：
+                                            </th>
+                                            <td>
+                                                <input class="txt" type="text" name ="account" value="{$contact_info['account']}"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                </form>
+                                <form class="validator"  action="{:U('update_work_exp',array('uid'=>$uid))}" method="post">
+                                    <div class="step" id="p2" <if condition="$flag neq 2">style="display:none"</if>>
+                                        <div><input type="button"  class="btn btn-primary btn-sm" style="margin-bottom:10px; float: left;"id="btn_addtr2" value="增行">
+                                        <input type="submit" class="btn btn-primary btn-sm" style="margin-right:80px; float: right;"id="save4" value="保存">
+                                        </div><br/><br/>
+                                        <div class="xian "style="width:100%;margin-bottom:15px;padding:0 200px; border-top:1px solid #ddd" ></div>
+                                        <div class="table-responsive">
+                                            <table id="dynamicTable2" class="table">
+                                                <thead>
+                                                <tr>
+                                                    <th style="text-align:center;width: 20%">工作单位</th>
+                                                    <th style="text-align:center;width: 20%">单位地址</th>
+                                                    <th style="text-align:center;width: 10%">职务</th>
+                                                    <th style="text-align:center;width: 10%">主要职责</th>
+                                                    <th style="text-align:center;width: 10%" >开始日期</th>
+                                                    <th style="text-align:center;width: 10%">结束日期</th>
+                                                    <th style="text-align:center;width: 10%">证明人</th>
+                                                    <th style="text-align:center;width: 10%">安全相关</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <if condition="$work_exp eq ''"><input type="hidden" name="countwork" id="countwork" value="1" >
+                                                    <tr>
+                                                        <input type="hidden" name="no" value="1"/>
+                                                        <td ><input type="text"  class="form-control"  name="work_unit0"/></td>
+                                                        <td ><input type="text"  class="form-control"  name="unit_address0"/></td>
+                                                        <td ><input type="text"  class="form-control"  name="post0"/></td>
+                                                        <td ><input type="text"  class="form-control"  name="duty0"/></td>
+                                                        <td style="width: 10%">
+                                                            <input  class="form-control" name="work_start_time0"  type="text" class="iput1" value=""
+                                                                    readonly="readonly"  onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:$('#work_start_time0').val()})"/>
+                                                        </td>
+                                                        <td style="width: 10%">
+                                                            <input  class="form-control" name="work_emd_time0"  type="text" class="iput1" value=""
+                                                                    readonly="readonly"  onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:$('#work_end_time0').val()})"/>
+                                                        </td>
+                                                        <td ><input type="text"  class="form-control"  name="witness0"/></td>
+                                                        <td style="text-align: center">
+                                                            <select name="security_related0" require="true">
+                                                                <option value= 1>是</option>
+                                                                <option value= 0>否</option>
+                                                            </select>
+                                                        </td>
+                                                        <td style="width:10%;"></td>
+                                                    </tr>
+                                                    <else/>
+                                                    {$work_exp}
+                                                </if>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </form>
+                                <form class="validator" action="{:U('update_education_exp',array('uid'=>$uid))}" id="form3" method="post">
+                                <div class="step" id="p3" <if condition="$flag neq 3">style="display:none"</if>>
+                                    <div><input type="button" class="btn btn-primary btn-sm" style="margin-bottom:10px; float: left;"id="btn_addtr3" value="增行">
+                                    <input type="submit" class="btn btn-primary btn-sm" style="margin-right:80px; float: right;"id="save2" value="保存">
+                                    </div><br/><br/>
+                                    <div class="xian "style="width:100%;margin-bottom:15px;padding:0 200px; border-top:1px solid #ddd" ></div>
+                                    <div class="table-responsive" style="width: 100%">
+                                        <table id="dynamicTable3" class="table" style="white-space:nowrap;width:100%;color:black">
+                                            <thead style="width:800px; color: black">
+                                            <tr style="width:800px">
+                                                <th style="text-align:center;width:10%;">学历</th>
+                                                <th style="text-align:center;width:20%">毕业学校</th>
+                                                <th style="text-align:center;width:20%">专业</th>
+                                                <th style="text-align:center;width:10%;">开始时间</th>
+                                                <th style="text-align:center;width:10%;">结束时间</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody style="width: 800px">
+                                            <if condition="$educationstr eq ''"><input type="hidden" name="count" id="count" value="1" >
+                                            <tr style="width: 800px">
+                                                <input type="hidden" name="no" value="1"/>
+                                                <td style="width: 10%"><input type="text" class="form-control" name="degree0"/></td>
+                                                <td style="width: 20%"><input type="text" class="form-control" name="graduation_school0"/></td>
+                                                <td style="width: 20%"><input type="text" class="form-control" name="major0"/></td>
+                                                <td style="width: 10%">
+                                                    <input  class="form-control" id="edu_start_time0" name="edu_start_time0"  type="text" class="iput1" value=""
+                                                            readonly="readonly"  onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:$('#edu_start_time0').val()})"/>
+                                                </td>
+                                                <td style="width: 10%">
+                                                    <input  class="form-control" id="edu_end_time0" name="edu_end_time0"  type="text" class="iput1" value=""
+                                                            readonly="readonly"  onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:$('#edu_end_time0').val()})"/>
+                                                </td>
+                                                <td style="width:10%;"></td>
+                                            </tr>
+                                                <else/>
+                                                {$educationstr}
+                                                </if>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                </form>
+                                <form class="validator" action="{:U('updatecertificate',array('uid'=>$uid))}" id="form4" method="post">
+                                    <div class="step" id="p4"  <if condition="$flag neq 4">style="display:none"</if>>
+                                       <div> <input type="submit" class="btn btn-primary btn-sm" style="margin-right:80px; float: right;"id="save0" value="保存">
+                                    </div><br/><br/>
+                                    暂时没想好要怎么弄。
+                                        <table id="table4" class="table table-condensed table-bordered" style="font-size: 20px; width: 90%;">
+                                            <input type="hidden" name="utype" value="0">
+                                            <tr>
+                                                <th class="col-md-2">
+                                                    培训机构：
+                                                </th>
+                                                <td class="col-md-5">
+                                                    <input type="hidden" name="institutionname" id="institutionname">
+                                                    <select name="institutionid" id="institutionid" class="select" disabled="disabled" onchange="getinstitutename(this.options[this.selectedIndex].text)">
+                                                        <volist name="institutionList" id="insList">
+                                                            <option value="{$insList['uid']}"
+                                                            <if condition="$certificateinfo['institutionid'] eq 0">
+                                                                <eq name="insList['uid']" value="$institutionid"> selected="selected" </eq>>
+                                                                <else/>
+                                                                <eq name="insList['uid']" value="$certificateinfo['institutionid']"> selected="selected" </eq>>
+                                                            </if>{$insList['username']}
+                                                            </option>
+                                                        </volist>
+                                                    </select>
+                                                </td>
+                                                <th class="col-md-2">
+                                                    培训班次：
+                                                </th>
+                                                <td class="col-md-4">
+                                                    <input type="hidden" name="classname" id="classname">
+                                                    <select name="classid" id="classid" class="select" onchange="getclassname(this.options[this.selectedIndex].text)">
+                                                        <volist name="classList" id="cList">
+                                                            <option value="{$cList['id']}"
+                                                            <eq name="cList['id']" value="$certificateinfo['classid']"> selected="selected" </eq>>
+                                                            {$cList['classname']}
+                                                            </option>
+                                                        </volist>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+
+                                                <th class="col-md-2">
+                                                    培训时间：
+                                                </th>
+                                                <td class="col-md-2">
+                                                    <input class="txt" style="width: 40%;" id="trainingtimestart"  type="text"  name="trainingtimestart" value="<if condition="$certificateinfo['trainingtimestart'] neq ''">{$certificateinfo['trainingtimestart']|date="Y-m-d",###}</if>"
+                                                           readonly="readonly" data-date-format="dd-mm-yyyy" onfocus="WdatePicker({maxDate:$('#trainingtimeend').val()})" />
+                                                    -
+                                                    <input  class="txt" style="width: 40%;" id="trainingtimeend" name="trainingtimeend"  type="text" value="<if condition="$certificateinfo['trainingtimeend'] neq ''">{$certificateinfo['trainingtimeend']|date="Y-m-d",###}</if>"
+                                                    readonly="readonly" data-date-format="dd-mm-yyyy"   onfocus="WdatePicker({minDate:$('#trainingtimestart').val()})"/>
+                                                </td>
+                                                <th  class="col-md-2">
+                                                    证书培训类型：
+                                                </th>
+                                                <td  class="4">
+                                                    <select name="certificatetype" require="true">
+                                                        <option value="CISO,CISE" <if condition="$certificateinfo['certificatetype'] eq 'CISO,CISE'"> selected="selected" </if>>CISO,CISE</option>
+                                                        <option value="CISM" <if condition="$certificateinfo['certificatetype'] eq 'CISM'"> selected="selected" </if>>CISM</option>
+                                                        <option value="CISA" <if condition="$certificateinfo['certificatetype'] eq 'CISA'"> selected="selected" </if>>CISA</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="tdL" >
+                                                    补考次数：
+                                                </th>
+                                                <td>
+                                                    <input class="txt" data-type="digits" type="text" name ="makeupexam" value="{$certificateinfo['makeupexam']}" />
+                                                </td>
+                                                <th class="tdL">
+                                                    是否获证：
+                                                </th >
+                                                <td>
+                                                    <select name="obtainthecertificate" require="true">
+                                                        <option value="1" <if condition="$certificateinfo['obtainthecertificate'] eq 1"> selected="selected" </if>>是</option>
+                                                        <option value="0" <if condition="$certificateinfo['obtainthecertificate'] eq 0"> selected="selected" </if>>否</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="tdL">
+                                                    证书编号：
+                                                </th >
+                                                <td >
+                                                    <input class="txt" type="text" name ="certificateno" value="{$certificateinfo['certificateno']}""/>
+                                                </td>
+                                                <th class="tdL" >
+                                                    获证时间：
+                                                </th>
+                                                <td >
+                                                    <input  class="txt"  name="cert_date"  type="text"  value="<if condition="$certificateinfo['cert_date'] neq ''">{$certificateinfo['certificatedate']|date="Y-m-d",###}</if>"
+                                                    readonly="readonly" data-date-format="dd-mm-yyyy"   onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="tdL">
+                                                    证书有效期：
+                                                </th>
+                                                <td >
+                                                    <input  class="txt"  name="certificatevaliditydate"  type="text"  value="<if condition="$certificateinfo['certificatevaliditydate'] neq ''">{$certificateinfo['certificatevaliditydate']|date="Y-m-d",###}</if>"
+                                                    readonly="readonly" data-date-format="dd-mm-yyyy" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                                                </td>
+
+                                                <th class="tdL" >
+                                                    维持时间：
+                                                </th>
+                                                <td >
+                                                    <input  class="txt"  name="maintaindate"  type="text"   value="<if condition="$certificateinfo['maintaindate'] neq ''">{$certificateinfo['maintaindate']|date="Y-m-d",###}</if>"
+                                                    readonly="readonly" data-date-format="dd-mm-yyyy" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                                                    <!--<input class="txt" name="maintaindate" id="maintaindate" value="<if condition="$certificateinfo['maintaindate'] neq ''">{$certificateinfo['maintaindate']|date="Y-m-d",###}</if>"-->
+                                                    <!--type="text" data-date-format="dd-mm-yyyy" readonly="readonly"  onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>-->
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="tdL" >
+                                                    维持有效期：
+                                                </th>
+                                                <td>
+                                                    <input  class="txt"  name="maintainvaliditydate"  type="text" value="<if condition="$certificateinfo['maintainvaliditydate'] neq ''">{$certificateinfo['maintainvaliditydate']|date="Y-m-d",###}</if>"
+                                                    readonly="readonly" data-date-format="dd-mm-yyyy"  onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                                                    <!--<input class="txt" name="maintainvaliditydate" id="maintainvaliditydate" value="<if condition="$certificateinfo['maintainvaliditydate'] neq ''">{$certificateinfo['maintainvaliditydate']|date="Y-m-d",###}</if>"-->
+                                                    <!--type="text" data-date-format="dd-mm-yyyy" readonly="readonly"  onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>-->
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </form>
+                                <form class="validator" action="{:U('update_cert_info',array('uid'=>$uid))}" method="post">
+                                <div class="step" id="p5"  <if condition="$flag neq 5">style="display:none"</if>>
+                                    <input type="button" class="btn btn-primary btn-sm" style="margin-bottom:10px;"id="btn_addtr1" value="增行">
+                                    <input type="submit" class="btn btn-primary btn-sm" style="margin-right:80px; float: right;"id="save3" value="保存">
+                                    <div class="xian "style="width:100%;margin-bottom:15px;padding:0 200px; border-top:1px solid #ddd" ></div>
+                                    <div class="table-responsive">
+                                        <table id="dynamicTable1" class="table">
+                                            <thead>
+                                            <tr>
+                                                <th style="text-align:center; width: 13%;">发证日期</th>
+                                                <th style="text-align:center; width: 13%;">到期日期</th>
+                                                <th style="text-align:center; width: 13%;">证书类型</th>
+                                                <th style="text-align:center;">证书名称</th>
+                                                <th style="text-align:center;">证书编号</th>
+                                                <th style="text-align:center;">发证机构</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <if condition="$cert_info eq ''"><input type="hidden" name="counttrain" id="counttrain" value="1" >
+                                            <tr>
+                                                <input type="hidden" name="no" value="1"/>
+                                                <td>
+                                                    <input  class="form-control" name="cert_start_time0"  type="text" class="iput1" value="" readonly="readonly"  onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                                                </td>
+                                                <td>
+                                                    <input  class="form-control" name="cert_end_time0"  type="text" class="iput1" value="" readonly="readonly"  onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                                                </td>
+                                                <td>
+                                                <select class="txt sel3 valid" data-required id="cert_type_number0" name="cert_type_number0">
+                                                    <option value= 1 >测试证件类型1</option>
+                                                    <option value= 2 >测试证件类型2</option>
+                                                </select>
+                                                </td>
+                                                <td><input type="text" class="form-control" name="cert_number"/></td>
+                                                <td><input type="text" class="form-control" name="cert_name0" /></td>
+                                                <td><input type="text" class="form-control" name="cert_au0"/></td>
+                                                <td style="width:10%;"></td>
+                                            </tr>
+                                            <else/>
+                                            {$cert_info}
+                                            </if>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                                </form>
+
+                                <form class="validator" action="{:U('updateregistration',array('uid'=>$uid))}" method="post">
+                                <div class="step" id="p6"  <if condition="$flag neq 6">style="display:none"</if>>
+                                    <input type="submit" class="btn btn-primary btn-sm" style="margin-bottom:10px;margin-right:80px; float: right;"id="save5" value="保存">
+                                    <table class="table table-condensed table-bordered" id="table5" style="width: 90%">
+                                        <tbody>
+                                        <tr>
+                                            <th class="col-md-2">培训种类</th>
+                                            <td class="col-md-2">
+                                                <select name="registrationtype" require="true">
+                                                    <option value="CISO,CISE" <if condition="$userregistrationinfo['registrationtype'] eq 'CISO,CISE'"> selected="selected" </if>>CISO,CISE</option>
+                                                    <option value="CISM" <if condition="$userregistrationinfo['registrationtype'] eq 'CISM'"> selected="selected" </if>>CISM</option>
+                                                    <option value="CISA" <if condition="$userregistrationinfo['registrationtype'] eq 'CISA'"> selected="selected" </if>>CISA</option>
+                                                </select>
+                                            </td>
+                                            <th class="col-md-2">姓&nbsp;&nbsp;名</th>
+                                            <td class="col-md-2"><input data-required type="text" name="ep_name" class="txt" require="true" value="{$userregistrationinfo['ep_name']}"></td>
+                                            <th class="col-md-2">职&nbsp;&nbsp;务</th>
+                                            <td class="col-md-2"><input type="text" name="ep_title" class="txt" require="true" value="{$userregistrationinfo['ep_title']}"></td>
+                                            <!--<td><input type="text" name="EP_Relationship" require="true" ></td>  -->
+                                        </tr>
+                                        <tr>
+                                            <th colspan="2">与申请人关系</th>
+                                            <td colspan="2">
+                                                <input type="checkbox" name="tongzai" value="同在" <if condition="$userregistrationinfo['ep_bumen'] neq ''" >checked="checked" </if>>
+                                                同在<input style="width:60%;" type="text" name="ep_bumen" class="txt" require="true" value="{$userregistrationinfo['ep_bumen']}">部门工作</td>
+                                                <td><input type="radio" name="dirleadorother" value="直接领导" required<if condition="$userregistrationinfo['dirleadorother'] eq '0'" >checked="checked" </if>>直接领导
+                                            </td>
+                                            <td><input type="radio" name="dirleadorother" value="其他" <if condition="$userregistrationinfo['dirleadorother'] eq '1'" >checked="checked" </if> >其他
+                                            </td>  <!--Direct leadership 直接领导简记DirLead-->
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="2">CNITSEC注册证书（如具备）</th>
+                                            <!--<td><input type="checkbox" name="Cert" value="Cert" checked="checked" /></td>-->
+                                            <th>证书类型</th>
+                                            <td>
+                                                <select name="ep_certtype" require="true">
+                                                    <option value="CISO,CISE" <if condition="$userregistrationinfo['ep_certtype'] eq 'CISO,CISE'"> selected="selected" </if>>CISO,CISE</option>
+                                                    <option value="CISM" <if condition="$userregistrationinfo['ep_certtype'] eq 'CISM'"> selected="selected" </if>>CISM</option>
+                                                    <option value="CISA" <if condition="$userregistrationinfo['ep_certtype'] eq 'CISA'"> selected="selected" </if>>CISA</option>
+                                                </select>
+                                             </td>
+                                            <th>证书编号</th>
+                                            <td><input type="text" class="txt" name="ep_certnum" require="true" value="{$userregistrationinfo['ep_certnum']}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th style="width: 8%">工作单位</th>
+                                            <td style="width: 12%"><input type="text" class="txt" name="ep_unit" require="true" value="{$userregistrationinfo['ep_unit']}"></td>
+                                            <th style="width: 8%">联系地址</th>
+                                            <td style="width: 10%"><input type="text"  class="txt" name="ep_address" require="true" value="{$userregistrationinfo['ep_address']}"></td>
+                                            <th>邮政编码</th>
+                                            <td><input data-type="digits" data-min=6 data-max=6 type="text" name="ep_zipcode" class="txt" require="true" value="{$userregistrationinfo['ep_zipcode']}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th style="width: 8%">联系电话</th>
+                                            <td style="width: 12%"><input data-required data-type="digits" data-min=7 type="text" name="ep_phone" class="txt" require="true" value="{$userregistrationinfo['ep_phone']}"></td>
+                                            <th style="width: 8%">传&nbsp;&nbsp;真</th>
+                                            <td style="width: 10%"><input data-type="digits" data-min=7 type="text" name="ep_fax" class="txt" require="true" value="{$userregistrationinfo['ep_fax']}"></td>
+                                            <th>电子邮件</th>
+                                            <td><input data-required data-type="email" type="text" name="ep_email" class="txt" require="true" value="{$userregistrationinfo['ep_email']}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th style="width: 8%">其他说明</th>
+                                            <td colspan="5">
+                                                <textarea id="ep_other" name="ep_other" class="form-control" datatype="Limit" min="0" max="50" maxlength="50" style="width:98%;height:108px;" >{$userregistrationinfo['ep_other']}</textarea>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>单位意见</th>
+                                            <td colspan="5">
+                                                该评价意见出具人所述情况是否属实：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <input type="radio" name="uv_istrue" value="1" checked="">是
+                                                <input type="radio" name="uv_istrue" value="0" checked="">否
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th></th>
+                                            <td colspan="5">
+                                                <textarea id="uv_other" class="form-control" name="uv_other" datatype="Limit" min="0" max="50" maxlength="50" style="width:98%;height:108px;" >{$userregistrationinfo['uv_other']}</textarea>
+                                            </td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                </form>
+                                <form class="validator" action="{:U('updatephoto',array('uid'=>$uid))}" method="post"  enctype="multipart/form-data" >
+                                <div class="step" id="p7"  <if condition="$flag neq 7">style="display:none"</if>>
+                                    <input type="submit" class="btn btn-primary btn-sm" style="margin-right:30px; float: right;"id="save6" value="保存">
+                                    <!--<input type="button" class="btn btn-primary btn-sm" style="margin-bottom:10px;"id="btn_addtr4" value="增行">-->
+
+                                    <br class="table-responsive">
+                                        </br>
+                                        <table id="dynamicTable4" class="table">
+                                            <thead>
+                                            <tr>
+                                                <th style="text-align:center;width:10%;" >文件名称</th>
+                                                <th style="text-align:center;width:15%;">文件描述</th>
+                                                <th style="text-align:center;width:30%;" >文件上传</th>
+                                                <th style="text-align:center;width:10%;" >文件操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td  style="text-align:center;vertical-align:middle;">
+                                                    <input type="text" name="userphoto" value="证件照" readonly="readonly">
+                                                </td>
+                                                <td  style="text-align:center;vertical-align:middle;">
+                                                <input type="text" name="userphotodepict" value="{$userphoto['filedescription']}">
+                                                </td>
+                                                <td  style="text-align:center">
+                                                    <input id="fileuserphoto" name="fileuserphoto" title=""  class="file" type="file" multiple>
+                                                </td>
+                                                <td style="text-align:center;vertical-align:middle;">
+                                                    <if condition="$userphoto['filesavename'] neq '' ">
+                                                    <a href="{:U('download',array('fid'=>$userphoto['id']))}"><i class="fa fa-download fa-lg" style="color: #18a665;"aria-hidden="true"></i></a>&nbsp;
+                                                    <else/>
+                                                    <a  title="未上传"><i class="fa fa-download fa-lg" style="color: grey;"aria-hidden="true"></i></a>&nbsp;
+                                                    </if>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td  style="text-align:center;vertical-align:middle;">
+                                                    <input type="text" name="idphoto" value="身份证扫描文件" readonly="readonly">
+                                                </td>
+                                                <td style="text-align:center;vertical-align:middle;">
+                                                <input type="text" name="idphotodepict" value="{$idphoto['filedescription']}">
+                                                </td>
+                                                <td style="text-align:center;vertical-align:middle;">
+                                                    <input id="fileidphotofile" name="fileidphotofile" title=""  class="file" type="file" multiple>
+                                                </td>
+                                                <td style="text-align:center;vertical-align:middle;">
+                                                    <if condition="$idphoto['filesavename'] neq '' ">
+                                                        <a href="{:U('download',array('fid'=>$idphoto['id']))}"><i class="fa fa-download fa-lg" style="color: #18a665;"aria-hidden="true"></i></a>&nbsp;
+                                                        <else/>
+                                                        <a  title="未上传"><i class="fa fa-download fa-lg" style="color: grey;"aria-hidden="true"></i></a>&nbsp;
+                                                    </if>
+                                                </td>
+
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center;vertical-align:middle;">
+                                                    <input type="text" name="professionphoto" value="学历学位扫描文件" readonly="readonly">
+                                                </td>
+                                                <td style="text-align:center;vertical-align:middle;">
+                                                    <input type="text" name="professiondepict" value="{$professionphoto['filedescription']}">
+                                                </td>
+                                                <td style="text-align:center;vertical-align:middle;">
+                                                    <input id="fileprofessionfile" name="fileprofessionfile" title=""  class="file" type="file" multiple>
+                                                </td>
+                                                <td style="text-align:center;vertical-align:middle;">
+                                                    <if condition="$professionphoto['filesavename'] neq '' ">
+                                                        <a href="{:U('download',array('fid'=>$professionphoto['id']))}"><i class="fa fa-download fa-lg" style="color: #18a665;"aria-hidden="true"></i></a>&nbsp;
+                                                        <else/>
+                                                        <a  title="未上传"><i class="fa fa-download fa-lg" style="color: grey;"aria-hidden="true"></i></a>&nbsp;
+                                                    </if>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center;vertical-align:middle;">
+                                                    <input type="text" name="cispphoto" value="CISP/CISM培训结业证书" readonly="readonly">
+                                                </td>
+                                                <td style="text-align:center;vertical-align:middle;">
+                                                    <input type="text" name="cispphotodepict" value="{$cispphoto['filedescription']}">
+                                                </td>
+                                                <td style="text-align:center;vertical-align:middle;">
+                                                    <input id="filecispphoto" name="filecispphoto" title=""  class="file" type="file" multiple>
+                                                </td>
+                                                <td style="text-align:center;vertical-align:middle;">
+                                                    <if condition="$cispphoto['filesavename'] neq '' ">
+                                                        <a href="{:U('download',array('fid'=>$cispphoto['id']))}"><i class="fa fa-download fa-lg" style="color: #18a665;"aria-hidden="true"></i></a>&nbsp;
+                                                        <else/>
+                                                        <a  title="未上传"><i class="fa fa-download fa-lg" style="color: grey;"aria-hidden="true"></i></a>&nbsp;
+                                                    </if>
+                                                </td>
+
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </form>
+                            </div>
+                    </div>
+                    </form>
+                        <!-- PAGE CONTENT ENDS -->
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+    <include file="Public/footer"/>
+</div><!-- /.main-container -->
+
+<include file="Public/footerjs"/>
+
+<link href="__PUBLIC__/qwadmin/css/fileinput.css" media="all" rel="stylesheet" type="text/css" />
+<script src="__PUBLIC__/qwadmin/js/fileinput.js" type="text/javascript"></script>
+<!--简体中文-->
+<script src="__PUBLIC__/qwadmin/js/locales/zh.js" type="text/javascript"></script>
+
+<!-- inline scripts related to this page -->
+<script src="__PUBLIC__/qwadmin/js/date-time/bootstrap-datepicker.js"></script>
+<script src="__PUBLIC__/qwadmin/js/function.js"></script>
+<script type="text/javascript">
+    $('#fileuserphoto').fileinput({
+        language: 'zh',
+        showUpload: false,
+        showPreview:false,
+    });
+    $('#fileidphotofile').fileinput({
+        language: 'zh',
+        showUpload: false,
+        showPreview:false,
+    });
+    $('#fileprofessionfile').fileinput({
+        language: 'zh',
+        showUpload: false,
+        showPreview:false,
+    });
+    $('#filecispphoto').fileinput({
+        language: 'zh',
+        showUpload: false,
+        showPreview:false,
+    });
+    /////////////////添加代码部分（增删行）/////////////////////
+    $(document).ready(function(){
+        $("#wizard ul li").each(function (i) {
+            $(this).click(function () {
+                var listr=$("#status").find("li");
+                $.each(listr,function(j,item){
+                    if(i==j)
+                        $(item).addClass("active");
+                    else
+                        $(item).removeClass("active");
+                })
+                var s=$(".step");
+                $.each(s,function(j,item){
+                    if(i==j)
+                    {
+                        $(item).css("display","block");
+                    }
+                    else
+                    {
+                        $(item).css("display","none");
+                    }
+                })
+                if(i!=0)
+                {
+                    $("#Buttonpre").css("display","inline");
+                }
+                if(i==0)
+                    $("#Buttonpre").css("display","none");
+                if(i==6)
+                {
+                    $("#Button3").css("display","none");
+                }
+                else
+                {
+                    $("#Button3").css("display","inline");
+                    $("#Button1").css("display","none");
+                }
+
+
+            });
+        });
+        $("#institutionname").attr('value',$("#institutionid option:selected").text());
+        $("#classname").attr('value',$("#classid option:selected").text());
+
+    });
+    $(function () {
+        $("#btn_addtr1").click(function () {
+                var len=$("#counttrain").val();
+                var str="";
+                str+="<input type=\"hidden\" name=\"no\" value=\"1\"/>";
+                str+="<td><input type=\"text\" class=\"form-control\" readonly=\"readonly\"  onFocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" name=\"cert_start_time"+len+"\"/></td>";
+                str+="<td><input type=\"text\" class=\"form-control\" readonly=\"readonly\"  onFocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" name=\"cert_end_time"+len+"\"/></td>";
+                str+="<td><select class=\"txt sel3 valid\" data-required id=\"cert_type_number"+len+"\" name=\"cert_type_number"+len+"\">";
+                str+="<option value= 1 >测试证件类型1</option>"
+                str+="<option value= 2 >测试证件类型2</option>"
+                str+="</select></td>"
+                str+="<td><input  class=\"form-control\" name=\"cert_name"+len+"\"  type=\"text\" class=\"iput1\" value=\"\" /></td>";
+                str+="<td><input type=\"text\" class=\"form-control\" name=\"cert_number"+len+"\"/></td>";
+                str+="<td><input  class=\"form-control\" name=\"cert_au"+len+"\"  type=\"text\" class=\"iput1\" value=\"\" /> </td>";
+                str+="<td><input type=\"button\" class=\"btn btn-primary btn-sm\"  onclick=\"deltr1(this)\" value=\"删行\"></td>";
+                $("#dynamicTable1 tbody").append("<tr style=\"width:800px\">"+str+"</tr>");
+                //  $("#tab113 tbody tr").clone().appendTo("#dynamicTable3 tbody");   //在表格后面添加一行
+                // changeIndex3();//更新行号
+
+                $("#counttrain").attr("value",parseInt($("#counttrain").val())+1);
+
+        });
+    });
+    function deltr1(opp) {
+        var length = $("#dynamicTable1 tbody tr").length;
+        //alert(length);
+        if (length <= 1) {
+            alert("至少保留一行");
+        } else {
+            $(opp).parent().parent().remove();//移除当前行
+            $("#counttrain").attr("value",parseInt($("#counttrain").val())-1);
+
+        }
+    }
+
+    $(function () {
+        $("#btn_addtr2").click(function () {
+                var len=$("#countwork").val();
+                var str="";
+                str+="<input type=\"hidden\" name=\"no\" value=\"1\"/>" ;
+                str+="<td style=\"width: 10%\"><input type=\"text\"  class=\"form-control\"  name=\"work_unit"+len+"\"/></td>";
+                str+="<td style=\"width: 10%\"><input type=\"text\"  class=\"form-control\"  name=\"unit_address"+len+"\"/></td>";
+                str+="<td style=\"width: 10%\"><input type=\"text\"  class=\"form-control\"  name=\"post"+len+"\"/></td>";
+                str+="<td style=\"width: 10%\"><input type=\"text\"  class=\"form-control\"  name=\"duty"+len+"\"/></td>";
+                str+="<td style=\"width: 10%\"> <input  class=\"form-control\" id=\"work_start_time"+len+"\" name=\"work_start_time"+len+"\"  type=\"text\" class=\"iput1\" value=\"\" readonly=\"readonly\"  onFocus=\"WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:$('#work_start_time"+len+"').val()})\"/></td>";
+                str+= "<td style=\"width: 10%\"><input  class=\"form-control\" id=\"work_end_time"+len+"\" name=\"work_end_time"+len+"\"  type=\"text\" class=\"iput1\" value=\"\" readonly=\"readonly\"   onFocus=\"WdatePicker({dateFmt:'yyyy-MM-dd',minDate:$('#work_end_time"+len+"').val()})\"/> </td>";
+                str+="<td style=\"width: 10%\"> <input type=\"text\"  class=\"form-control\" name=\"witness"+len+"\"/></td>"
+                str+="<td style=\"width: 10%;text-align: center\"> <select name=\"security_related"+len+"\" require=\"true\"> <option value=1 >是</option> <option value=0 >否</option> </select> </td>";
+                str+="<td><input type=\"button\"  class=\"btn btn-primary btn-sm\" onclick=\"deltr2(this)\" value=\"删行\"></td>";
+                $("#dynamicTable2 tbody").append("<tr style=\"width:800px\">"+str+"</tr>");
+                //  $("#tab113 tbody tr").clone().appendTo("#dynamicTable3 tbody");   //在表格后面添加一行
+                // changeIndex3();//更新行号
+                $("#countwork").attr("value",parseInt($("#countwork").val())+1);
+
+
+        });
+    });
+    function deltr2(opp) {
+        var length = $("#dynamicTable2 tbody tr").length;
+        //alert(length);
+        if (length <= 1) {
+            alert("至少保留一行");
+        } else {
+            $(opp).parent().parent().remove();//移除当前行
+            $("#countwork").attr("value",parseInt($("#countwork").val())-1);
+
+        }
+    }
+
+    $(function () {
+        var show_count = 20;   //要显示的条数
+        var count = 1;    //递增的开始值，这里是你的ID
+        $("#btn_addtr4").click(function () {
+
+            var length = $("#dynamicTable4 tbody tr").length;
+            //alert(length);
+            if (length < show_count)    //点击时候，如果当前的数字小于递增结束的条件
+            {
+                $("#tab114 tbody tr").clone().appendTo("#dynamicTable4 tbody");   //在表格后面添加一行
+            }
+        });
+    });
+    function deltr4(opp) {
+        var length = $("#dynamicTable4 tbody tr").length;
+        //alert(length);
+        $(opp).parent().parent().remove();//移除当前行
+
+    }
+
+    $(function () {
+        $("#btn_addtr3").click(function () {
+                var len=$("#count").val();
+                var str="";
+                str+="<input type=\"hidden\" name=\"no\" value=\"1\"/>" ;
+                str+="<td style=\"width: 10%\"><input type=\"text\" class=\"form-control\" name=\"degree"+len+"\"/></td>";
+                str+="<td style=\"width: 20%\"><input type=\"text\" class=\"form-control\" name=\"graduation_school"+len+"\"/></td>";
+                str+="<td style=\"width: 20%\"><input type=\"text\" class=\"form-control\" name=\"major"+len+"\"/></td>";
+                str+="<td style=\"width: 10%\"><input  class=\"form-control\" id=\"edu_start_time"+len+"\" name=\"edu_start_time"+len+"\"  type=\"text\" class=\"iput1\" value=\"\" readonly=\"readonly\"  onFocus=\"WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:$('#edu_start_time"+len+"').val()})\"/></td>";
+                str+="<td style=\"width: 10%\"><input  class=\"form-control\" id=\"edu_end_time"+len+"\" name=\"edu_end_time"+len+"\"  type=\"text\" class=\"iput1\" value=\"\" readonly=\"readonly\"  onFocus=\"WdatePicker({dateFmt:'yyyy-MM-dd',minDate:$('#edu_end_time"+len+"').val()})\"/> </td>";
+                str+="<td style=\"width: 10%\"><input type=\"button\" class=\"btn btn-primary btn-sm\"  onclick=\"deltr3(this)\" value=\"删行\"></td>";
+                $("#dynamicTable3 tbody").append("<tr style=\"width:800px\">"+str+"</tr>");
+              //  $("#tab113 tbody tr").clone().appendTo("#dynamicTable3 tbody");   //在表格后面添加一行
+                // changeIndex3();//更新行号
+
+                $("#count").attr("value",parseInt($("#count").val())+1);
+
+
+        });
+    });
+    /* function changeIndex3() {
+     var educationLevel=["高中","大学","研究生","博士"];
+     var i=0;
+     $("#dynamicTable3 tbody tr").each(function () { //循环tab tbody下的tr
+     $(this).find(".educationLev")[0].innerHTML=educationLevel[i++];//更新行号
+     });
+     }*/
+    function deltr3(opp) {
+        var length = $("#dynamicTable3 tbody tr").length;
+        //alert(length);
+        if (length <= 1) {
+            alert("至少保留一行");
+        } else {
+            $(opp).parent().parent().remove();//移除当前行
+            $("#count").attr("value",parseInt($("#count").val())-1);
+
+        }
+    }
+
+    function getinstitutename(text){
+        $("#institutionname").attr('value',text);
+    }
+
+    function getclassname(text){
+        $("#classname").attr('value',text);
+    }
+    Validator.language = 'en';
+</script>
+</body>
+</html>
