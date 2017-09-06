@@ -446,66 +446,55 @@ class UserController extends ComController
         $this->redirect('edit', array('uid'=>$uid,'flag'=>5));
     }
 
-    public function updateregistration($ajax = ''){
+    public function update_evaluate_info($ajax = ''){
         $uid = isset($_GET['uid']) ? intval($_GET['uid']) : false;
-        $userregistration['registrationtype']= isset($_POST['registrationtype']) ? trim($_POST['registrationtype']) : '';
+//        $userregistration['registrationtype']= isset($_POST['registrationtype']) ? trim($_POST['registrationtype']) : '';
         $userregistration['ep_name']= isset($_POST['ep_name']) ? trim($_POST['ep_name']) : '';
-        $userregistration['ep_title']= isset($_POST['ep_title']) ? trim($_POST['ep_title']) : '';
-        $userregistration['ep_certtype'] = isset($_POST['ep_certtype']) ? trim($_POST['ep_certtype']) : '';
-        $userregistration['ep_certnum']= isset($_POST['ep_certnum']) ? trim($_POST['ep_certnum']) : '';
+        $userregistration['ep_post']= isset($_POST['ep_post']) ? trim($_POST['ep_post']) : '';
+        $ep_relationship = $_POST['ep_relationship'];
+        if($ep_relationship == '同在'){
+            $userregistration['ep_relationship'] = 0;
+        }else if($ep_relationship == '直接领导'){
+            $userregistration['ep_relationship'] = 1;
+        }else{
+            $userregistration['ep_relationship'] = 2;
+        }
+        $ep_department = $_POST['ep_department'];
+        $userregistration['ep_department'] = $ep_department;
+        $userregistration['ep_cert_type'] = isset($_POST['ep_cert_type']) ? trim($_POST['ep_cert_type']) : '';
+        $userregistration['ep_cert_number']= isset($_POST['ep_cert_number']) ? trim($_POST['ep_cert_number']) : '';
         $userregistration['ep_unit'] = isset($_POST['ep_unit']) ? trim($_POST['ep_unit']) : 1;
         $userregistration['ep_address'] = isset($_POST['ep_address']) ? trim($_POST['ep_address']) : 0;
         $userregistration['ep_zipcode']= isset($_POST['ep_zipcode']) ? trim($_POST['ep_zipcode']) : '';
         $userregistration['ep_phone']= isset($_POST['ep_phone']) ? trim($_POST['ep_phone']) : '';
         $userregistration['ep_fax']= isset($_POST['ep_fax']) ? trim($_POST['ep_fax']) : '';
         $userregistration['ep_email']= isset($_POST['ep_email']) ? trim($_POST['ep_email']) : '';
-        $userregistration['ep_other']= isset($_POST['ep_other']) ? trim($_POST['ep_other']) : '';
+        $userregistration['ep_other_comment']= isset($_POST['ep_other_comment']) ? trim($_POST['ep_other_comment']) : '';
         $userregistration['uv_istrue']= isset($_POST['uv_istrue']) ? pack('C',trim($_POST['uv_istrue'])) : '';
-        $userregistration['uv_other']= isset($_POST['uv_other']) ? trim($_POST['uv_other']) : '';
+        $userregistration['uv_other_comment']= isset($_POST['uv_other_comment']) ? trim($_POST['uv_other_comment']) : '';
         $userregistration['lasteditdate']=date('Y-m-d') ;
         $tongzai = $_POST['tongzai'];
-        $ep_bumen = $_POST['ep_bumen'];
-        $dirleadorother = $_POST['dirleadorother'];//复选框选直接领导，此值0。复选框选其他，此值为1。
-        //直接领导和其他不能同时选择，**其他;||**直接领导;||没有**（**为部门名称）
-        if(isset($tongzai))
-            $userregistration['ep_bumen'] = $ep_bumen;
-        if($dirleadorother == '直接领导'){
-            $userregistration['dirleadorother'] = 0;
-        }else{
-            $userregistration['dirleadorother'] = 1;
-        }
 
-//        if(isset($tongzai) and $tongzai == '同在'){
-//            $ep_relationship=$ep_bumen.';';
-//        }
-//        if(isset($dirLead) and $dirLead == '直接领导'){
-//            $ep_relationship=$ep_relationship.$dirlead.';';
-//        }
-//        else
-//            $ep_relationship=$ep_relationship.';';
-//        if(isset($other)){
-//            $ep_relationship=$ep_relationship.$other.';';
-//        }
-//        else{
-//
-//        }
+
+
+
         if (!$uid) {
 
         }
         else {
-            $examregistration=M('examregistration');
-            $count=$examregistration->field("examregistration.*")
-                ->where("personnelid=".$uid)
+            $examregistration=M('evaluate_info');
+            $count=$examregistration->field("evaluate_info.*")
+                ->where("person_number =".$uid)
                 ->count();
             if($count==0)
             {
                 $userregistration['registrationdate']= date('Y-m-d');
                 $userregistration['createdate']=date('Y-m-d');
-                $userregistration['personnelid']=$uid;
-                M('examregistration')->data($userregistration)->add();
+                $userregistration['person_number']=$uid;
+                M('evaluate_info')->data($userregistration)->add();
             }
             else
-                M('examregistration')->data($userregistration)->where("personnelid=".$uid)->save();
+                M('evaluate_info')->data($userregistration)->where("person_number=".$uid)->save();
         }
         $this->redirect('edit', array('uid'=>$uid,'flag'=>6));
 
@@ -627,8 +616,8 @@ class UserController extends ComController
                 ->select();
 //            $cert_type = M('cert_type')->getField('id, cert_type');
 
-            $userregistrationinfo=M('examregistration')->field("examregistration.*")
-                ->where("personnelid=$uid")
+            $userregistrationinfo=M('evaluate_info')->field("evaluate_info.*")
+                ->where("person_number=$uid")
                 ->find();
             $userphoto=M('file')->field("file.*")
                 ->where("personnelid=$uid and filetype='2'")
@@ -715,11 +704,11 @@ class UserController extends ComController
             $str2 = mb_substr($relationstr,-3,-1,'utf-8');
             if($str1=='直接领导') {
                 $userregistrationinfo['dirlead'] = 1;
-                $userregistrationinfo['ep_bumen']=mb_substr($relationstr,0,-5,'utf-8');
+                $userregistrationinfo['ep_department']=mb_substr($relationstr,0,-5,'utf-8');
             }
             if($str2=='其他'){
                 $userregistrationinfo['other']=1;
-                $userregistrationinfo['ep_bumen']=mb_substr($relationstr,0,-3,'utf-8');
+                $userregistrationinfo['ep_department']=mb_substr($relationstr,0,-3,'utf-8');
             }
 
         } else {

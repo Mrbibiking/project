@@ -614,34 +614,34 @@
                                 </div>
                                 </form>
 
-                                <form class="validator" action="{:U('updateregistration',array('uid'=>$uid))}" method="post">
+                                <form class="validator" action="{:U('update_evaluate_info',array('uid'=>$uid))}" method="post">
                                 <div class="step" id="p6"  <if condition="$flag neq 6">style="display:none"</if>>
                                     <input type="submit" class="btn btn-primary btn-sm" style="margin-bottom:10px;margin-right:80px; float: right;"id="save5" value="保存">
                                     <table class="table table-condensed table-bordered" id="table5" style="width: 90%">
                                         <tbody>
                                         <tr>
-                                            <th class="col-md-2">培训种类</th>
-                                            <td class="col-md-2">
-                                                <select name="registrationtype" require="true">
-                                                    <option value="CISO,CISE" <if condition="$userregistrationinfo['registrationtype'] eq 'CISO,CISE'"> selected="selected" </if>>CISO,CISE</option>
-                                                    <option value="CISM" <if condition="$userregistrationinfo['registrationtype'] eq 'CISM'"> selected="selected" </if>>CISM</option>
-                                                    <option value="CISA" <if condition="$userregistrationinfo['registrationtype'] eq 'CISA'"> selected="selected" </if>>CISA</option>
-                                                </select>
-                                            </td>
+                                            <!--<th class="col-md-2">培训种类</th>-->
+                                            <!--<td class="col-md-2">-->
+                                                <!--<select name="registrationtype" require="true">-->
+                                                    <!--<option value="CISO,CISE" <if condition="$userregistrationinfo['registrationtype'] eq 'CISO,CISE'"> selected="selected" </if>>CISO,CISE</option>-->
+                                                    <!--<option value="CISM" <if condition="$userregistrationinfo['registrationtype'] eq 'CISM'"> selected="selected" </if>>CISM</option>-->
+                                                    <!--<option value="CISA" <if condition="$userregistrationinfo['registrationtype'] eq 'CISA'"> selected="selected" </if>>CISA</option>-->
+                                                <!--</select>-->
+                                            <!--</td>-->
                                             <th class="col-md-2">姓&nbsp;&nbsp;名</th>
                                             <td class="col-md-2"><input data-required type="text" name="ep_name" class="txt" require="true" value="{$userregistrationinfo['ep_name']}"></td>
                                             <th class="col-md-2">职&nbsp;&nbsp;务</th>
-                                            <td class="col-md-2"><input type="text" name="ep_title" class="txt" require="true" value="{$userregistrationinfo['ep_title']}"></td>
+                                            <td class="col-md-2"><input type="text" name="ep_post" class="txt" require="true" value="{$userregistrationinfo['ep_post']}"></td>
                                             <!--<td><input type="text" name="EP_Relationship" require="true" ></td>  -->
                                         </tr>
                                         <tr>
                                             <th colspan="2">与申请人关系</th>
                                             <td colspan="2">
-                                                <input type="checkbox" name="tongzai" value="同在" <if condition="$userregistrationinfo['ep_bumen'] neq ''" >checked="checked" </if>>
-                                                同在<input style="width:60%;" type="text" name="ep_bumen" class="txt" require="true" value="{$userregistrationinfo['ep_bumen']}">部门工作</td>
-                                                <td><input type="radio" name="dirleadorother" value="直接领导" required<if condition="$userregistrationinfo['dirleadorother'] eq '0'" >checked="checked" </if>>直接领导
+                                                <input type="radio" name="ep_relationship" value="同在" <if condition = "$userregistrationinfo['ep_relationship'] eq 0">checked = "checked"</if>>
+                                                同在<input style="width:60%;" type="text" name="ep_department" class="txt" value="{$userregistrationinfo['ep_department']}">部门工作</td>
+                                                <td><input type="radio" name="ep_relationship" value="直接领导" required <if condition = "$userregistrationinfo['ep_relationship'] eq 1">checked = "checked"</if>>直接领导
                                             </td>
-                                            <td><input type="radio" name="dirleadorother" value="其他" <if condition="$userregistrationinfo['dirleadorother'] eq '1'" >checked="checked" </if> >其他
+                                            <td><input type="radio" name="ep_relationship" value="其他" <if condition = "$userregistrationinfo['ep_relationship'] eq 2">checked = "checked"</if> >其他
                                             </td>  <!--Direct leadership 直接领导简记DirLead-->
 
                                             </td>
@@ -651,14 +651,14 @@
                                             <!--<td><input type="checkbox" name="Cert" value="Cert" checked="checked" /></td>-->
                                             <th>证书类型</th>
                                             <td>
-                                                <select name="ep_certtype" require="true">
-                                                    <option value="CISO,CISE" <if condition="$userregistrationinfo['ep_certtype'] eq 'CISO,CISE'"> selected="selected" </if>>CISO,CISE</option>
-                                                    <option value="CISM" <if condition="$userregistrationinfo['ep_certtype'] eq 'CISM'"> selected="selected" </if>>CISM</option>
-                                                    <option value="CISA" <if condition="$userregistrationinfo['ep_certtype'] eq 'CISA'"> selected="selected" </if>>CISA</option>
+                                                <select name="ep_cert_type" require="true">
+                                                    <option value="CISO,CISE" <if condition="$userregistrationinfo['ep_cert_type'] eq 'CISO,CISE'"> selected="selected" </if>>CISO,CISE</option>
+                                                    <option value="CISM" <if condition="$userregistrationinfo['ep_cert_type'] eq 'CISM'"> selected="selected" </if>>CISM</option>
+                                                    <option value="CISA" <if condition="$userregistrationinfo['ep_cert_type'] eq 'CISA'"> selected="selected" </if>>CISA</option>
                                                 </select>
                                              </td>
                                             <th>证书编号</th>
-                                            <td><input type="text" class="txt" name="ep_certnum" require="true" value="{$userregistrationinfo['ep_certnum']}"></td>
+                                            <td><input type="text" class="txt" name="ep_cert_number" require="true" value="{$userregistrationinfo['ep_cert_number']}"></td>
                                         </tr>
                                         <tr>
                                             <th style="width: 8%">工作单位</th>
@@ -679,7 +679,7 @@
                                         <tr>
                                             <th style="width: 8%">其他说明</th>
                                             <td colspan="5">
-                                                <textarea id="ep_other" name="ep_other" class="form-control" datatype="Limit" min="0" max="50" maxlength="50" style="width:98%;height:108px;" >{$userregistrationinfo['ep_other']}</textarea>
+                                                <textarea id="ep_other_comment" name="ep_other_comment" class="form-control" datatype="Limit" min="0" max="50" maxlength="50" style="width:98%;height:108px;" >{$userregistrationinfo['ep_other_comment']}</textarea>
                                             </td>
                                         </tr>
                                         <tr>
@@ -693,7 +693,7 @@
                                         <tr>
                                             <th></th>
                                             <td colspan="5">
-                                                <textarea id="uv_other" class="form-control" name="uv_other" datatype="Limit" min="0" max="50" maxlength="50" style="width:98%;height:108px;" >{$userregistrationinfo['uv_other']}</textarea>
+                                                <textarea id="uv_other_comment" class="form-control" name="uv_other_comment" datatype="Limit" min="0" max="50" maxlength="50" style="width:98%;height:108px;" >{$userregistrationinfo['uv_other_comment']}</textarea>
                                             </td>
                                         </tr>
 
