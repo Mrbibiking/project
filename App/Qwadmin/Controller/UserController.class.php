@@ -475,11 +475,7 @@ class UserController extends ComController
         $userregistration['lasteditdate']=date('Y-m-d') ;
         $tongzai = $_POST['tongzai'];
 
-
-
-
         if (!$uid) {
-
         }
         else {
             $examregistration=M('evaluate_info');
@@ -488,7 +484,6 @@ class UserController extends ComController
                 ->count();
             if($count==0)
             {
-                $userregistration['registrationdate']= date('Y-m-d');
                 $userregistration['createdate']=date('Y-m-d');
                 $userregistration['person_number']=$uid;
                 M('evaluate_info')->data($userregistration)->add();
@@ -602,10 +597,11 @@ class UserController extends ComController
                 ->order("id asc")
                 ->select();
 
-            $usereducationinfo=M('education_exp')->field("education_exp.*")
+            $education_exp_tmp = M('education_exp')->field("education_exp.*")
                 ->where("person_number=$uid")
                 ->order("id asc")
                 ->select();
+
             $usercertificateinfo=M('examinationandcertificate')
                 ->where("id=".intval($basic_info['examinationandcertificateid']))
                 ->find();
@@ -614,11 +610,12 @@ class UserController extends ComController
                 ->where("person_number = $uid")
                 ->order("id asc")
                 ->select();
-//            $cert_type = M('cert_type')->getField('id, cert_type');
+            $cert_type = M('cert_type')->getField('id, cert_type');
 
-            $userregistrationinfo=M('evaluate_info')->field("evaluate_info.*")
+            $evaluate_info=M('evaluate_info')->field("evaluate_info.*")
                 ->where("person_number=$uid")
                 ->find();
+
             $userphoto=M('file')->field("file.*")
                 ->where("personnelid=$uid and filetype='2'")
                 ->find();
@@ -632,43 +629,42 @@ class UserController extends ComController
                 ->where("personnelid=$uid and filetype='5'")
                 ->find();
 
-            $educationlen=sizeof($usereducationinfo);
-            $educationstr="";
+            $educationlen=sizeof($education_exp_tmp);
+            $education_exp="";
             for($i=0;$i<$educationlen;$i++){
-                $educationstr = $educationstr."<tr style=\"width:800px\">";
+                $education_exp = $education_exp."<tr style=\"width:800px\">";
                 $str="" ;
-                $str=$str."<input type=\"hidden\" name=\"no\" value=\"1\"/><td style=\"width: 10%\"><input type=\"text\" class=\"form-control\" name=\"degree".$i."\" value=\"".($usereducationinfo[$i]['degree'])."\"/></td>";
-                $str=$str."<td style=\"width: 20%\"><input type=\"text\" class=\"form-control\" name=\"graduation_school".$i."\" value=\"".($usereducationinfo[$i]['graduation_school'])."\"/></td>";
-                $str=$str."<td style=\"width: 20%\"><input type=\"text\" class=\"form-control\" name=\"major".$i."\" value=\"".($usereducationinfo[$i]['major'])."\"/></td>";
-                $str=$str."<td style=\"width: 10%\"><input  class=\"form-control\"  id=\"edu_start_time".$i."\" name=\"edu_start_time".$i."\" type=\"text\" class=\"iput1\" value=\"".($usereducationinfo[$i]['edu_start_time'])."\" readonly=\"readonly\"  onFocus=\"WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:$('#edu_start_time".$i."').val()})\"/></td>";
-                $str=$str."<td style=\"width: 10%\"><input  class=\"form-control\" id=\"edu_end_time".$i."\"  name=\"edu_end_time".$i."\"  type=\"text\" class=\"iput1\" value=\"".($usereducationinfo[$i]['edu_end_time'])."\" readonly=\"readonly\"  onFocus=\"WdatePicker({dateFmt:'yyyy-MM-dd',minDate:$('#edu_end_time".$i."').val()})\"/> </td>";
+                $str=$str."<input type=\"hidden\" name=\"no\" value=\"1\"/><td style=\"width: 10%\"><input type=\"text\" class=\"form-control\" name=\"degree".$i."\" value=\"".($education_exp_tmp[$i]['degree'])."\"/></td>";
+                $str=$str."<td style=\"width: 20%\"><input type=\"text\" class=\"form-control\" name=\"graduation_school".$i."\" value=\"".($education_exp_tmp[$i]['graduation_school'])."\"/></td>";
+                $str=$str."<td style=\"width: 20%\"><input type=\"text\" class=\"form-control\" name=\"major".$i."\" value=\"".($education_exp_tmp[$i]['major'])."\"/></td>";
+                $str=$str."<td style=\"width: 10%\"><input  class=\"form-control\"  id=\"edu_start_time".$i."\" name=\"edu_start_time".$i."\" type=\"text\" class=\"iput1\" value=\"".($education_exp_tmp[$i]['edu_start_time'])."\" readonly=\"readonly\"  onFocus=\"WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:$('#edu_start_time".$i."').val()})\"/></td>";
+                $str=$str."<td style=\"width: 10%\"><input  class=\"form-control\" id=\"edu_end_time".$i."\"  name=\"edu_end_time".$i."\"  type=\"text\" class=\"iput1\" value=\"".($education_exp_tmp[$i]['edu_end_time'])."\" readonly=\"readonly\"  onFocus=\"WdatePicker({dateFmt:'yyyy-MM-dd',minDate:$('#edu_end_time".$i."').val()})\"/> </td>";
                 $str=$str."<td style=\"width: 10%\"><input type=\"button\" class=\"btn btn-primary btn-sm\" onclick=\"deltr3(this)\" value=\"删行\"></td>";
-                $educationstr=$educationstr.$str;
-                $educationstr=$educationstr."</tr>";
+                $education_exp=$education_exp.$str;
+                $education_exp=$education_exp."</tr>";
             }
             if($educationlen!=0)
-            $educationstr=$educationstr."<input type=\"hidden\" name=\"count\" id=\"count\" value=\"".$educationlen."\" >";
+                $education_exp=$education_exp."<input type=\"hidden\" name=\"count\" id=\"count\" value=\"".$educationlen."\" >";
 
             $trainginglen=sizeof($cert_info_tmp);
             $cert_info = "";
-            for($i=0;$i<$trainginglen;$i++){
+            for($i = 0; $i < $trainginglen; $i++){
                 $cert_info = $cert_info."<tr style=\"width:800px\">";
-                $str1="" ;
-                $str1=$str1."<input type=\"hidden\" name=\"no\" value=\"1\"/><td><input type=\"text\" class=\"form-control\"  readonly=\"readonly\"  onFocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\"  name=\"cert_start_time".$i."\" value=\"".($cert_info_tmp[$i]['cert_start_time'])."\"/></td>";
-                $str1=$str1."<input type=\"hidden\" name=\"no\" value=\"1\"/><td><input type=\"text\" class=\"form-control\"  readonly=\"readonly\"  onFocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\"  name=\"cert_end_time".$i."\" value=\"".($cert_info_tmp[$i]['cert_end_time'])."\"/></td>";
-                $str1=$str1."<td><select class=\"txt sel3 valid\" data-required id=\"cert_type_number".$i."\" name=\"cert_type_number".$i."\">";
-                if($cert_info_tmp[$i]['cert_type_number'] == 0) {
-                    $str1 = $str1 . "<option value= 0 selected >测试证件类型1</option>";
-                    $str1 = $str1 . "<option value= 1 >测试证件类型2</option>";
-                } else {
-                    $str1 = $str1 . "<option value= 0 >测试证件类型1</option>";
-                    $str1 = $str1 . "<option value= 1 selected >测试证件类型2</option>";
+                $str1 = "" ;
+                $str1 = $str1."<input type=\"hidden\" name=\"no\" value=\"1\"/><td><input type=\"text\" class=\"form-control\"  readonly=\"readonly\"  onFocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\"  name=\"cert_start_time".$i."\" value=\"".($cert_info_tmp[$i]['cert_start_time'])."\"/></td>";
+                $str1 = $str1."<input type=\"hidden\" name=\"no\" value=\"1\"/><td><input type=\"text\" class=\"form-control\"  readonly=\"readonly\"  onFocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\"  name=\"cert_end_time".$i."\" value=\"".($cert_info_tmp[$i]['cert_end_time'])."\"/></td>";
+                $str1 = $str1."<td><select class=\"txt sel3 valid\" data-required id=\"cert_type_number".$i."\" name=\"cert_type_number".$i."\">";
+                foreach($cert_type as $key => $val){
+                    if($key == $cert_info_tmp[$i]['cert_type_number'])
+                        $str1 = $str1."<option value='$key' selected>$val</option>";
+                    else
+                        $str1 = $str1."<option value='$key' >$val</option>";
                 }
-                $str1=$str1."</select></td>";
-                $str1=$str1."<td><input  class=\"form-control\" name=\"cert_name".$i."\" type=\"text\" class=\"iput1\" value=\"".($cert_info_tmp[$i]['cert_name'])."\" /></td>";
-                $str1=$str1."<td><input type=\"text\" class=\"form-control\" name=\"cert_number".$i."\" value=\"".($cert_info_tmp[$i]['cert_number'])."\"/></td>";
-                $str1=$str1."<td><input type=\"text\" class=\"form-control\" name=\"cert_au".$i."\" value=\"".($cert_info_tmp[$i]['cert_au'])."\"/></td>";
-                $str1=$str1."<td><input type=\"button\" class=\"btn btn-primary btn-sm\"  onclick=\"deltr3(this)\" value=\"删行\"></td>";
+                $str1 = $str1."</select></td>";
+                $str1 = $str1."<td><input  class=\"form-control\" name=\"cert_name".$i."\" type=\"text\" class=\"iput1\" value=\"".($cert_info_tmp[$i]['cert_name'])."\" /></td>";
+                $str1 = $str1."<td><input type=\"text\" class=\"form-control\" name=\"cert_number".$i."\" value=\"".($cert_info_tmp[$i]['cert_number'])."\"/></td>";
+                $str1 = $str1."<td><input type=\"text\" class=\"form-control\" name=\"cert_au".$i."\" value=\"".($cert_info_tmp[$i]['cert_au'])."\"/></td>";
+                $str1 = $str1."<td><input type=\"button\" class=\"btn btn-primary btn-sm\"  onclick=\"deltr3(this)\" value=\"删行\"></td>";
                 $cert_info = $cert_info.$str1;
                 $cert_info = $cert_info."</tr>";
             }
@@ -695,20 +691,20 @@ class UserController extends ComController
                 $work_exp=$work_exp.$str2;
                 $work_exp=$work_exp."</tr>";
             }
-            if($worklen!=0)
-                $work_exp=$work_exp."<input type=\"hidden\" name=\"countwork\" id=\"countwork\" value=\"".$worklen."\" >";
-            $relationstr=$userregistrationinfo['ep_relationship'];
+            if($worklen != 0)
+                $work_exp = $work_exp."<input type=\"hidden\" name=\"countwork\" id=\"countwork\" value=\"".$worklen."\" >";
+            $relationstr = $evaluate_info['ep_relationship'];
 
             //从后向前截取字符串
             $str1 = mb_substr($relationstr,-5,-1,'utf-8');
             $str2 = mb_substr($relationstr,-3,-1,'utf-8');
-            if($str1=='直接领导') {
-                $userregistrationinfo['dirlead'] = 1;
-                $userregistrationinfo['ep_department']=mb_substr($relationstr,0,-5,'utf-8');
+            if($str1 == '直接领导') {
+                $evaluate_info['dirlead'] = 1;
+                $evaluate_info['ep_department'] = mb_substr($relationstr,0,-5,'utf-8');
             }
-            if($str2=='其他'){
-                $userregistrationinfo['other']=1;
-                $userregistrationinfo['ep_department']=mb_substr($relationstr,0,-3,'utf-8');
+            if($str2 == '其他'){
+                $evaluate_info['other'] = 1;
+                $evaluate_info['ep_department'] = mb_substr($relationstr,0,-3,'utf-8');
             }
 
         } else {
@@ -724,10 +720,10 @@ class UserController extends ComController
         $this->assign('contact_info',$contact_info);
         $this->assign('account_type',$account_type);
         $this->assign('work_exp',$work_exp);
-        $this->assign('educationstr',$educationstr);
+        $this->assign('education_exp',$education_exp);
         $this->assign('certificateinfo',$usercertificateinfo);
         $this->assign('cert_info',$cert_info);
-        $this->assign('userregistrationinfo',$userregistrationinfo);
+        $this->assign('evaluate_info',$evaluate_info);
         $this->assign('userphoto',$userphoto);
         $this->assign('idphoto',$idphoto);
         $this->assign('professionphoto',$professionphoto);
@@ -796,6 +792,9 @@ class UserController extends ComController
         $this->assign('institutionList',$arr);
     }
 
-
-
+    public function cert_type_select_generate()//AJAX
+    {
+        $cert_type = M('cert_type')->select();
+        $this->ajaxReturn($cert_type);//ajax返回数据的方式，用ajaxReturn。
+    }
 }

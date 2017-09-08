@@ -1,0 +1,99 @@
+<include file="Public/head"/>
+<style type="text/css">
+    #table0{
+        margin:0px auto;
+    }
+    #table0  td{
+        font-size: 13px !important;
+        vertical-align: middle !important;
+    }
+    #table0  th{background-color: #F7F7F7;
+        text-align: right !important;
+        font-size: 13px !important;
+        color: #707070 !important;
+        vertical-align: middle !important;
+    }
+</style>
+
+<body class="no-skin">
+<include file="Public/header"/>
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {
+        }
+    </script>
+
+    <include file="Public/sidebar"/>
+    <div class="main-content">
+        <div class="main-content-inner">
+            <!-- #section:basics/content.breadcrumbs -->
+            <include file="Public/breadcrumbs"/>
+
+            <!-- /section:basics/content.breadcrumbs -->
+            <div class="page-content">
+                <!-- /section:settings.box -->
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- PAGE CONTENT BEGINS -->
+                        <form  action="{:U('update',array('uid'=>$uid))}" method="post" >
+                            <div>
+                                <input type="submit" class="btn btn-primary btn-sm" style="margin-right:80px; float: right;" id="save0" value="保存">
+                            </div><br/><br/>
+                            <table id="table0" class="table table-condensed table-bordered" style="width: 90%" >
+                                <input type="hidden" name="utype" value="0">
+                                <tr>
+                                    <th class="col-md-1">
+                                        积分规则类型：
+                                    </th>
+                                    <td class="col-md-2">
+                                        <input class="txt" type="text" name ="integral_rule_type" required value="{$integralinfo['integral_rule_type']}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="tdL">
+                                        积分规则描述：
+                                    </th>
+                                    <td>
+                                        <input class="txt" type="text" name ="rule_description" value="{$integralinfo['rule_description']}"/>
+                                    </td>
+                                   
+                                </tr>
+                                <tr>
+                                    <th class="tdL" >
+                                        积分值：
+                                    </th>
+                                    <td >
+                                        <input class="txt" type = "text" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" name ="integral_value" value="{$integralinfo['integral_value']}"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                        <!-- PAGE CONTENT ENDS -->
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+    <include file="Public/footer"/>
+
+</div><!-- /.main-container -->
+
+<include file="Public/footerjs"/>
+<!-- inline scripts related to this page -->
+<script src="__PUBLIC__/qwadmin/js/date-time/bootstrap-datepicker.js"></script>
+<script src="__PUBLIC__/qwadmin/js/function.js"></script>
+<script type="text/javascript">
+    jQuery(function ($) {
+        $('#birthday').datepicker({
+            format: 'yyyy-mm-dd',
+            weekStart: 1,
+            autoclose: true,
+            todayBtn: 'linked',
+            language: 'cn'
+        });
+    });
+</script>
+</body>
+</html>

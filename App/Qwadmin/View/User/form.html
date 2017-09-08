@@ -413,7 +413,7 @@
                                             </tr>
                                             </thead>
                                             <tbody style="width: 800px">
-                                            <if condition="$educationstr eq ''"><input type="hidden" name="count" id="count" value="1" >
+                                            <if condition="$education_exp eq ''"><input type="hidden" name="count" id="count" value="1" >
                                             <tr style="width: 800px">
                                                 <input type="hidden" name="no" value="1"/>
                                                 <td style="width: 10%"><input type="text" class="form-control" name="degree0"/></td>
@@ -430,7 +430,7 @@
                                                 <td style="width:10%;"></td>
                                             </tr>
                                                 <else/>
-                                                {$educationstr}
+                                                {$education_exp}
                                                 </if>
 
                                             </tbody>
@@ -523,7 +523,7 @@
                                                     证书编号：
                                                 </th >
                                                 <td >
-                                                    <input class="txt" type="text" name ="certificateno" value="{$certificateinfo['certificateno']}""/>
+                                                    <input class="txt" type="text" name ="certificateno" value="{$certificateinfo['certificateno']}/>
                                                 </td>
                                                 <th class="tdL" >
                                                     获证时间：
@@ -595,8 +595,26 @@
                                                 </td>
                                                 <td>
                                                 <select class="txt sel3 valid" data-required id="cert_type_number0" name="cert_type_number0">
-                                                    <option value= 1 >测试证件类型1</option>
-                                                    <option value= 2 >测试证件类型2</option>
+                                                <script>
+                                                    function cert_type_select_generate(len) {
+                                                        $.ajax({
+                                                            url:"__CONTROLLER__/cert_type_select_generate",//这里指向的就不再是页面了，而是一个方法。
+                                                            data:{},
+                                                            type:"POST",
+                                                            dataType:"JSON",
+                                                            success:function(data){
+                                                                var str="";
+                                                                for(key in data)
+                                                                {
+                                                                    str = str+"<option value='"+data[key].id+"'>"+data[key].cert_type+"</option>";
+                                                                }
+                                                                alert("#cert_type_number" + len);
+                                                                $("#cert_type_number" + len).html(str);
+                                                            }
+                                                        })
+                                                    }
+                                                    cert_type_select_generate(0);
+                                                </script>
                                                 </select>
                                                 </td>
                                                 <td><input type="text" class="form-control" name="cert_number"/></td>
@@ -620,28 +638,20 @@
                                     <table class="table table-condensed table-bordered" id="table5" style="width: 90%">
                                         <tbody>
                                         <tr>
-                                            <!--<th class="col-md-2">培训种类</th>-->
-                                            <!--<td class="col-md-2">-->
-                                                <!--<select name="registrationtype" require="true">-->
-                                                    <!--<option value="CISO,CISE" <if condition="$userregistrationinfo['registrationtype'] eq 'CISO,CISE'"> selected="selected" </if>>CISO,CISE</option>-->
-                                                    <!--<option value="CISM" <if condition="$userregistrationinfo['registrationtype'] eq 'CISM'"> selected="selected" </if>>CISM</option>-->
-                                                    <!--<option value="CISA" <if condition="$userregistrationinfo['registrationtype'] eq 'CISA'"> selected="selected" </if>>CISA</option>-->
-                                                <!--</select>-->
-                                            <!--</td>-->
                                             <th class="col-md-2">姓&nbsp;&nbsp;名</th>
-                                            <td class="col-md-2"><input data-required type="text" name="ep_name" class="txt" require="true" value="{$userregistrationinfo['ep_name']}"></td>
+                                            <td class="col-md-2"><input data-required type="text" name="ep_name" class="txt" require="true" value="{$evaluate_info['ep_name']}"></td>
                                             <th class="col-md-2">职&nbsp;&nbsp;务</th>
-                                            <td class="col-md-2"><input type="text" name="ep_post" class="txt" require="true" value="{$userregistrationinfo['ep_post']}"></td>
+                                            <td class="col-md-2"><input type="text" name="ep_post" class="txt" require="true" value="{$evaluate_info['ep_post']}"></td>
                                             <!--<td><input type="text" name="EP_Relationship" require="true" ></td>  -->
                                         </tr>
                                         <tr>
                                             <th colspan="2">与申请人关系</th>
                                             <td colspan="2">
-                                                <input type="radio" name="ep_relationship" value="同在" <if condition = "$userregistrationinfo['ep_relationship'] eq 0">checked = "checked"</if>>
-                                                同在<input style="width:60%;" type="text" name="ep_department" class="txt" value="{$userregistrationinfo['ep_department']}">部门工作</td>
-                                                <td><input type="radio" name="ep_relationship" value="直接领导" required <if condition = "$userregistrationinfo['ep_relationship'] eq 1">checked = "checked"</if>>直接领导
+                                                <input type="radio" name="ep_relationship" value="同在" <if condition = "$evaluate_info['ep_relationship'] eq 0">checked = "checked"</if>>
+                                                同在<input style="width:60%;" type="text" name="ep_department" class="txt" value="{$evaluate_info['ep_department']}">部门工作</td>
+                                                <td><input type="radio" name="ep_relationship" value="直接领导" required <if condition = "$evaluate_info['ep_relationship'] eq 1">checked = "checked"</if>>直接领导
                                             </td>
-                                            <td><input type="radio" name="ep_relationship" value="其他" <if condition = "$userregistrationinfo['ep_relationship'] eq 2">checked = "checked"</if> >其他
+                                            <td><input type="radio" name="ep_relationship" value="其他" <if condition = "$evaluate_info['ep_relationship'] eq 2">checked = "checked"</if> >其他
                                             </td>  <!--Direct leadership 直接领导简记DirLead-->
 
                                             </td>
@@ -652,34 +662,34 @@
                                             <th>证书类型</th>
                                             <td>
                                                 <select name="ep_cert_type" require="true">
-                                                    <option value="CISO,CISE" <if condition="$userregistrationinfo['ep_cert_type'] eq 'CISO,CISE'"> selected="selected" </if>>CISO,CISE</option>
-                                                    <option value="CISM" <if condition="$userregistrationinfo['ep_cert_type'] eq 'CISM'"> selected="selected" </if>>CISM</option>
-                                                    <option value="CISA" <if condition="$userregistrationinfo['ep_cert_type'] eq 'CISA'"> selected="selected" </if>>CISA</option>
+                                                    <option value="CISO,CISE" <if condition="$evaluate_info['ep_cert_type'] eq 'CISO,CISE'"> selected="selected" </if>>CISO,CISE</option>
+                                                    <option value="CISM" <if condition="$evaluate_info['ep_cert_type'] eq 'CISM'"> selected="selected" </if>>CISM</option>
+                                                    <option value="CISA" <if condition="$evaluate_info['ep_cert_type'] eq 'CISA'"> selected="selected" </if>>CISA</option>
                                                 </select>
                                              </td>
                                             <th>证书编号</th>
-                                            <td><input type="text" class="txt" name="ep_cert_number" require="true" value="{$userregistrationinfo['ep_cert_number']}"></td>
+                                            <td><input type="text" class="txt" name="ep_cert_number" require="true" value="{$evaluate_info['ep_cert_number']}"></td>
                                         </tr>
                                         <tr>
                                             <th style="width: 8%">工作单位</th>
-                                            <td style="width: 12%"><input type="text" class="txt" name="ep_unit" require="true" value="{$userregistrationinfo['ep_unit']}"></td>
+                                            <td style="width: 12%"><input type="text" class="txt" name="ep_unit" require="true" value="{$evaluate_info['ep_unit']}"></td>
                                             <th style="width: 8%">联系地址</th>
-                                            <td style="width: 10%"><input type="text"  class="txt" name="ep_address" require="true" value="{$userregistrationinfo['ep_address']}"></td>
+                                            <td style="width: 10%"><input type="text"  class="txt" name="ep_address" require="true" value="{$evaluate_info['ep_address']}"></td>
                                             <th>邮政编码</th>
-                                            <td><input data-type="digits" data-min=6 data-max=6 type="text" name="ep_zipcode" class="txt" require="true" value="{$userregistrationinfo['ep_zipcode']}"></td>
+                                            <td><input data-type="digits" data-min=6 data-max=6 type="text" name="ep_zipcode" class="txt" require="true" value="{$evaluate_info['ep_zipcode']}"></td>
                                         </tr>
                                         <tr>
                                             <th style="width: 8%">联系电话</th>
-                                            <td style="width: 12%"><input data-required data-type="digits" data-min=7 type="text" name="ep_phone" class="txt" require="true" value="{$userregistrationinfo['ep_phone']}"></td>
+                                            <td style="width: 12%"><input data-required data-type="digits" data-min=7 type="text" name="ep_phone" class="txt" require="true" value="{$evaluate_info['ep_phone']}"></td>
                                             <th style="width: 8%">传&nbsp;&nbsp;真</th>
-                                            <td style="width: 10%"><input data-type="digits" data-min=7 type="text" name="ep_fax" class="txt" require="true" value="{$userregistrationinfo['ep_fax']}"></td>
+                                            <td style="width: 10%"><input data-type="digits" data-min=7 type="text" name="ep_fax" class="txt" require="true" value="{$evaluate_info['ep_fax']}"></td>
                                             <th>电子邮件</th>
-                                            <td><input data-required data-type="email" type="text" name="ep_email" class="txt" require="true" value="{$userregistrationinfo['ep_email']}"></td>
+                                            <td><input data-required data-type="email" type="text" name="ep_email" class="txt" require="true" value="{$evaluate_info['ep_email']}"></td>
                                         </tr>
                                         <tr>
                                             <th style="width: 8%">其他说明</th>
                                             <td colspan="5">
-                                                <textarea id="ep_other_comment" name="ep_other_comment" class="form-control" datatype="Limit" min="0" max="50" maxlength="50" style="width:98%;height:108px;" >{$userregistrationinfo['ep_other_comment']}</textarea>
+                                                <textarea id="ep_other_comment" name="ep_other_comment" class="form-control" datatype="Limit" min="0" max="50" maxlength="50" style="width:98%;height:108px;" >{$evaluate_info['ep_other_comment']}</textarea>
                                             </td>
                                         </tr>
                                         <tr>
@@ -693,7 +703,7 @@
                                         <tr>
                                             <th></th>
                                             <td colspan="5">
-                                                <textarea id="uv_other_comment" class="form-control" name="uv_other_comment" datatype="Limit" min="0" max="50" maxlength="50" style="width:98%;height:108px;" >{$userregistrationinfo['uv_other_comment']}</textarea>
+                                                <textarea id="uv_other_comment" class="form-control" name="uv_other_comment" datatype="Limit" min="0" max="50" maxlength="50" style="width:98%;height:108px;" >{$evaluate_info['uv_other_comment']}</textarea>
                                             </td>
                                         </tr>
 
@@ -876,14 +886,12 @@
                     $("#Button3").css("display","inline");
                     $("#Button1").css("display","none");
                 }
-
-
             });
         });
         $("#institutionname").attr('value',$("#institutionid option:selected").text());
         $("#classname").attr('value',$("#classid option:selected").text());
-
     });
+
     $(function () {
         $("#btn_addtr1").click(function () {
                 var len=$("#counttrain").val();
@@ -892,21 +900,42 @@
                 str+="<td><input type=\"text\" class=\"form-control\" readonly=\"readonly\"  onFocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" name=\"cert_start_time"+len+"\"/></td>";
                 str+="<td><input type=\"text\" class=\"form-control\" readonly=\"readonly\"  onFocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" name=\"cert_end_time"+len+"\"/></td>";
                 str+="<td><select class=\"txt sel3 valid\" data-required id=\"cert_type_number"+len+"\" name=\"cert_type_number"+len+"\">";
-                str+="<option value= 1 >测试证件类型1</option>"
-                str+="<option value= 2 >测试证件类型2</option>"
                 str+="</select></td>"
                 str+="<td><input  class=\"form-control\" name=\"cert_name"+len+"\"  type=\"text\" class=\"iput1\" value=\"\" /></td>";
                 str+="<td><input type=\"text\" class=\"form-control\" name=\"cert_number"+len+"\"/></td>";
                 str+="<td><input  class=\"form-control\" name=\"cert_au"+len+"\"  type=\"text\" class=\"iput1\" value=\"\" /> </td>";
                 str+="<td><input type=\"button\" class=\"btn btn-primary btn-sm\"  onclick=\"deltr1(this)\" value=\"删行\"></td>";
                 $("#dynamicTable1 tbody").append("<tr style=\"width:800px\">"+str+"</tr>");
+                cert_type_select_generate(len);
                 //  $("#tab113 tbody tr").clone().appendTo("#dynamicTable3 tbody");   //在表格后面添加一行
                 // changeIndex3();//更新行号
-
                 $("#counttrain").attr("value",parseInt($("#counttrain").val())+1);
-
         });
     });
+
+    function test() {
+        alert('test111');
+    }
+
+    function cert_type_select_generate(len) {
+        $.ajax({
+            url:"__CONTROLLER__/cert_type_select_generate",//这里指向的就不再是页面了，而是一个方法。
+            data:{},
+            type:"POST",
+            dataType:"JSON",
+            success:function(data){
+//                alert(data[0].cert_type);//这里要用索引，使用eq读取不出来数据。
+                var str="";
+                for(key in data)
+                {
+                    str = str+"<option value='"+data[key].id+"'>"+data[key].cert_type+"</option>";
+                }
+                alert("#cert_type_number" + len);
+                $("#cert_type_number" + len).html(str);
+            }
+        })
+    }
+    
     function deltr1(opp) {
         var length = $("#dynamicTable1 tbody tr").length;
         //alert(length);
@@ -915,7 +944,6 @@
         } else {
             $(opp).parent().parent().remove();//移除当前行
             $("#counttrain").attr("value",parseInt($("#counttrain").val())-1);
-
         }
     }
 
@@ -937,8 +965,6 @@
                 //  $("#tab113 tbody tr").clone().appendTo("#dynamicTable3 tbody");   //在表格后面添加一行
                 // changeIndex3();//更新行号
                 $("#countwork").attr("value",parseInt($("#countwork").val())+1);
-
-
         });
     });
     function deltr2(opp) {
@@ -989,10 +1015,10 @@
                 // changeIndex3();//更新行号
 
                 $("#count").attr("value",parseInt($("#count").val())+1);
-
-
         });
     });
+
+
     /* function changeIndex3() {
      var educationLevel=["高中","大学","研究生","博士"];
      var i=0;
@@ -1000,6 +1026,7 @@
      $(this).find(".educationLev")[0].innerHTML=educationLevel[i++];//更新行号
      });
      }*/
+
     function deltr3(opp) {
         var length = $("#dynamicTable3 tbody tr").length;
         //alert(length);
