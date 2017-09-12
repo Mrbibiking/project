@@ -1,0 +1,168 @@
+<include file="Public/head"/>
+<style type="text/css">
+    #table0{
+        margin:0px auto;
+
+
+    }
+    #table0  td{
+        font-size: 13px !important;
+        vertical-align: middle !important;
+    }
+    #table0  th{background-color: #F7F7F7;
+        text-align: right !important;
+        font-size: 13px !important;
+        color: #707070 !important;
+        vertical-align: middle !important;
+    }
+</style>
+
+<body class="no-skin">
+<include file="Public/header"/>
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {
+        }
+    </script>
+
+    <include file="Public/sidebar"/>
+    <div class="main-content">
+        <div class="main-content-inner">
+            <!-- #section:basics/content.breadcrumbs -->
+            <include file="Public/breadcrumbs"/>
+
+            <!-- /section:basics/content.breadcrumbs -->
+            <div class="page-content">
+                <!-- /section:settings.box -->
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- PAGE CONTENT BEGINS -->
+                        <form  action="{:U('update',array('uid'=>$uid))}" method="post" >
+                            <div>
+                                <input type="submit" class="btn btn-primary btn-sm" style="margin-right:80px; float: right;" id="save0" value="保存">
+                            </div><br/><br/>
+                            <table id="table0" class="table table-condensed table-bordered" style="width: 90%" >
+                                <input type="hidden" name="utype" value="0">
+                                <tr>
+                                    <th style="width:220px" class="col-md-1">
+                                        培训机构名称：
+                                    </th>
+                                    <td class="col-md-2">
+                                        <input class="txt" type="text" name ="trainins_name" required value="{$institutioninfo['trainins_name']}"/>
+                                    </td>
+                                    <th class="tdL">
+                                        联系人：
+                                    </th>
+                                    <td>
+                                        <input class="txt" type="text" name ="trainins_contact" required value="{$institutioninfo['trainins_contact']}"/>
+                                    </td>
+                                    <!--<th class="col-md-1">-->
+                                    <!--培训种类：-->
+                                    <!--</th>-->
+                                    <!--<td class="col-md-4">-->
+                                    <!--&lt;!&ndash;<input name ="trainingtype" type="checkbox" value="CISA">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<input name ="trainingtype" type="checkbox" value="CISM">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<input name ="trainingtype" type="checkbox" value="CISO,CISE">&ndash;&gt;-->
+                                    <!--{$coursetypestr}-->
+                                    <!--<input name ="trainingtype" type="checkbox" value="定制培训类型">定制培训类型</input>-->
+                                    <!--<input class="txt" type="text" name ="typetxt" />-->
+                                    <!--</td>-->
+                                </tr>
+                                <!--<tr>-->
+                                <!--<th class="tdL">-->
+                                <!--培训机构登录名：-->
+                                <!--</th>-->
+                                <!--<td>-->
+                                <!--<input class="txt" type="text" name ="user" required value="{$institutioninfo['user']}"/>-->
+                                <!--</td>-->
+                                <!--<th class="tdL">-->
+                                <!--登录密码：-->
+                                <!--</th>-->
+                                <!--<td>-->
+                                <!--<input  type="password" name="password" id="password" required placeholder="登录密码"-->
+                                <!--class="col-xs-10 col-sm-5" value="{$institutioninfo['password']}">-->
+                                <!--</td>-->
+                                <!--</tr>-->
+                                <tr>
+                                    <th class="tdL">
+                                        通讯地址：
+                                    </th>
+                                    <td>
+                                        <input class="txt" type="text" name ="trainins_address" value="{$institutioninfo['trainins_address']}"/>
+                                    </td>
+                                    <th class="tdL">
+                                        联系人固话：
+                                    </th>
+                                    <td >
+                                        <input class="txt" type="text" name ="trainins_fixed_phone" required value="{$institutioninfo['trainins_fixed_phone']}"/>
+                                    </td>
+                                    <!--<th class="tdL">-->
+                                    <!--邮编：-->
+                                    <!--</th>-->
+                                    <!--<td>-->
+                                    <!--<input class="txt" type="text" name ="zip" value="{$institutioninfo['zip']}"/>-->
+
+                                    <!--</td>-->
+                                </tr>
+                                <tr>
+                                    <th class="tdL" >
+                                        联系人手机：
+                                    </th>
+                                    <td >
+                                        <input class="txt" type="text" name ="trainins_mobile_phone" value="{$institutioninfo['trainins_mobile_phone']}"/>
+                                    </td>
+                                    <th class="tdL">
+                                        传真：
+                                    </th>
+                                    <td >
+                                        <input class="txt" type="text" name ="trainins_fax" value="{$institutioninfo['trainins_fax']}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="tdL" >
+                                        电子邮箱：
+                                    </th>
+                                    <td >
+                                        <input class="txt" type="text" name ="trainins_email" required value="{$institutioninfo['trainins_email']}"/>
+                                    </td>
+
+                                    <!--<th class="tdL">-->
+                                    <!--培训机构负责人：-->
+                                    <!--</th>-->
+                                    <!--<td>-->
+                                    <!--<input class="txt" type="text" name ="personincharge" value="{$institutioninfo['personincharge']}"/>-->
+                                    <!--</td>-->
+                                </tr>
+
+
+                            </table>
+                        </form>
+                        <!-- PAGE CONTENT ENDS -->
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+    <include file="Public/footer"/>
+
+</div><!-- /.main-container -->
+
+<include file="Public/footerjs"/>
+<!-- inline scripts related to this page -->
+<script src="__PUBLIC__/qwadmin/js/date-time/bootstrap-datepicker.js"></script>
+<script src="__PUBLIC__/qwadmin/js/function.js"></script>
+<script type="text/javascript">
+    jQuery(function ($) {
+        $('#birthday').datepicker({
+            format: 'yyyy-mm-dd',
+            weekStart: 1,
+            autoclose: true,
+            todayBtn: 'linked',
+            language: 'cn'
+        });
+    });
+</script>
+</body>
+</html>

@@ -13,13 +13,26 @@
     <div class="main-content">
         <div class="main-content-inner">
             <!-- #section:basics/content.breadcrumbs -->
-            <include file="Public/breadcrumbs"/> 
+            <include file="Public/breadcrumbs"/>
 
             <!-- /section:basics/content.breadcrumbs -->
             <div class="page-content">
                 <include file="Public/set"/>
                 <div class="cf">
-                    <a class="btn btn-info" href="{:U('add')}" value="">新增</a>
+                    <form action="" post="get">
+                        <a class="btn btn-info" href="{:U('add')}" value="">新增</a>
+                        <label class="inline">用户搜索</label>
+                        <select name="field">
+                            <option value="course_number">课程序号</option>
+                            <option value="course_name">课程</option>
+                            <option value="course_description">课程描述</option>
+                            <option value="course_type_number">课程分类</option>
+                        </select>
+                        <input type="text" name="keyword">
+                        <button  type="submit" class="btn btn-purple btn-sm">
+                            <span class="ace-icon fa fa-search icon-on-right bigger-110" type="submit">查询</span>
+                        </button>
+                    </form>
                 </div>
                 <form id="form" method="post" action="{:U('del')}">
                     <table class="table table-striped table-bordered">
@@ -46,13 +59,13 @@
                                 </td>
                             </tr>
                         </volist>
-                        
+
                     </table>
+                    <tr>{$page}</tr>
                 </form>
                 <div class="cf">
                     <input id="submit" class="btn btn-info" type="button" value="删除">
                 </div>
-                <tr>{$page}</tr>
             </div>
         </div>
     </div>

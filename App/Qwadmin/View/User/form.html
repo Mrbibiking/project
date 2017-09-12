@@ -104,10 +104,10 @@
                                     <li  <if condition="$flag eq 1 or $flag eq ''">class="active" </if>style="cursor: pointer"><strong>1.</strong>人员基本信息</li>
                                     <li <if condition="$flag eq 2">class="active" </if> style="cursor: pointer"><strong>2.</strong>工作经历</li>
                                     <li <if condition="$flag eq 3">class="active" </if> style="cursor: pointer"><strong>3.</strong>教育经历</li>
-                                    <li <if condition="$flag eq 4">class="active" </if> style="cursor: pointer"><strong>4.</strong>考试及证书</li>
-                                    <li <if condition="$flag eq 5">class="active" </if> style="cursor: pointer"><strong>5.</strong>其他获证情况</li>
-                                    <li <if condition="$flag eq 6">class="active" </if> style="cursor: pointer"><strong>6.</strong>评价人意见</li>
-                                    <li <if condition="$flag eq 7">class="active" </if> style="cursor: pointer"><strong>7.</strong>附件上传</li>
+                                    <!--<li <if condition="$flag eq 4">class="active" </if> style="cursor: pointer"><strong>4.</strong>考试及证书</li>-->
+                                    <li <if condition="$flag eq 5">class="active" </if> style="cursor: pointer"><strong>4.</strong>其他获证情况</li>
+                                    <li <if condition="$flag eq 6">class="active" </if> style="cursor: pointer"><strong>5.</strong>评价人意见</li>
+                                    <li <if condition="$flag eq 7">class="active" </if> style="cursor: pointer"><strong>6.</strong>附件上传</li>
                                 </ul>
                                 <input type="hidden" id="flag" name="flag" value="{$flag}">
                                 <input type="hidden" name="uid" value="{$uid}">
@@ -432,140 +432,118 @@
                                                 <else/>
                                                 {$education_exp}
                                                 </if>
-
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                                 </form>
-                                <form class="validator" action="{:U('updatecertificate',array('uid'=>$uid))}" id="form4" method="post">
-                                    <div class="step" id="p4"  <if condition="$flag neq 4">style="display:none"</if>>
-                                       <div> <input type="submit" class="btn btn-primary btn-sm" style="margin-right:80px; float: right;"id="save0" value="保存">
-                                    </div><br/><br/>
-                                    暂时没想好要怎么弄。
-                                        <table id="table4" class="table table-condensed table-bordered" style="font-size: 20px; width: 90%;">
-                                            <input type="hidden" name="utype" value="0">
-                                            <tr>
-                                                <th class="col-md-2">
-                                                    培训机构：
-                                                </th>
-                                                <td class="col-md-5">
-                                                    <input type="hidden" name="institutionname" id="institutionname">
-                                                    <select name="institutionid" id="institutionid" class="select" disabled="disabled" onchange="getinstitutename(this.options[this.selectedIndex].text)">
-                                                        <volist name="institutionList" id="insList">
-                                                            <option value="{$insList['uid']}"
-                                                            <if condition="$certificateinfo['institutionid'] eq 0">
-                                                                <eq name="insList['uid']" value="$institutionid"> selected="selected" </eq>>
-                                                                <else/>
-                                                                <eq name="insList['uid']" value="$certificateinfo['institutionid']"> selected="selected" </eq>>
-                                                            </if>{$insList['username']}
-                                                            </option>
-                                                        </volist>
-                                                    </select>
-                                                </td>
-                                                <th class="col-md-2">
-                                                    培训班次：
-                                                </th>
-                                                <td class="col-md-4">
-                                                    <input type="hidden" name="classname" id="classname">
-                                                    <select name="classid" id="classid" class="select" onchange="getclassname(this.options[this.selectedIndex].text)">
-                                                        <volist name="classList" id="cList">
-                                                            <option value="{$cList['id']}"
-                                                            <eq name="cList['id']" value="$certificateinfo['classid']"> selected="selected" </eq>>
-                                                            {$cList['classname']}
-                                                            </option>
-                                                        </volist>
-                                                    </select>
-                                                </td>
-                                            </tr>
-                                            <tr>
+                                <!--<form class="validator" action="{:U('updatecertificate',array('uid'=>$uid))}" id="form4" method="post">-->
+                                    <!--<div class="step" id="p4"  <if condition="$flag neq 4">style="display:none"</if>>-->
+                                       <!--<div> <input type="submit" class="btn btn-primary btn-sm" style="margin-right:80px; float: right;"id="save0" value="保存">-->
+                                    <!--</div><br/><br/>-->
+                                        <!--<table id="table4" class="table table-condensed table-bordered" style="font-size: 20px; width: 90%;">-->
+                                            <!--<input type="hidden" name="utype" value="0">-->
+                                            <!--<tr>-->
+                                                <!--<th class="col-md-2">-->
+                                                    <!--培训机构：-->
+                                                <!--</th>-->
+                                                <!--<td class="col-md-5">-->
+                                                    <!--<input type="hidden" name="institutionname" id="institutionname">-->
+                                                <!--</td>-->
+                                                <!--<th class="col-md-2">-->
+                                                    <!--培训班次：-->
+                                                <!--</th>-->
+                                                <!--<td class="col-md-4">-->
+                                                    <!--<input type="hidden" name="classname" id="classname">-->
+                                                <!--</td>-->
+                                            <!--</tr>-->
+                                            <!--<tr>-->
+                                                <!--<th class="col-md-2">-->
+                                                    <!--培训时间：-->
+                                                <!--</th>-->
+                                                <!--<td class="col-md-2">-->
+                                                    <!--<input class="txt" style="width: 40%;" id="trainingtimestart"  type="text"  name="trainingtimestart" value="<if condition="$certificateinfo['trainingtimestart'] neq ''">{$certificateinfo['trainingtimestart']|date="Y-m-d",###}</if>"-->
+                                                           <!--readonly="readonly" data-date-format="dd-mm-yyyy" onfocus="WdatePicker({maxDate:$('#trainingtimeend').val()})" />-->
+                                                    <!-- - -->
+                                                    <!--<input  class="txt" style="width: 40%;" id="trainingtimeend" name="trainingtimeend"  type="text" value="<if condition="$certificateinfo['trainingtimeend'] neq ''">{$certificateinfo['trainingtimeend']|date="Y-m-d",###}</if>"-->
+                                                    <!--readonly="readonly" data-date-format="dd-mm-yyyy"   onfocus="WdatePicker({minDate:$('#trainingtimestart').val()})"/>-->
+                                                <!--</td>-->
+                                                <!--<th  class="col-md-2">-->
+                                                    <!--证书培训类型：-->
+                                                <!--</th>-->
+                                                <!--<td  class="4">-->
+                                                    <!--<select name="certificatetype" require="true">-->
+                                                        <!--<option value="CISO,CISE" <if condition="$certificateinfo['certificatetype'] eq 'CISO,CISE'"> selected="selected" </if>>CISO,CISE</option>-->
+                                                        <!--<option value="CISM" <if condition="$certificateinfo['certificatetype'] eq 'CISM'"> selected="selected" </if>>CISM</option>-->
+                                                        <!--<option value="CISA" <if condition="$certificateinfo['certificatetype'] eq 'CISA'"> selected="selected" </if>>CISA</option>-->
+                                                    <!--</select>-->
+                                                <!--</td>-->
+                                            <!--</tr>-->
+                                            <!--<tr>-->
+                                                <!--<th class="tdL" >-->
+                                                    <!--补考次数：-->
+                                                <!--</th>-->
+                                                <!--<td>-->
+                                                    <!--<input class="txt" data-type="digits" type="text" name ="makeupexam" value="{$certificateinfo['makeupexam']}" />-->
+                                                <!--</td>-->
+                                                <!--<th class="tdL">-->
+                                                    <!--是否获证：-->
+                                                <!--</th >-->
+                                                <!--<td>-->
+                                                    <!--<select name="obtainthecertificate" require="true">-->
+                                                        <!--<option value="1" <if condition="$certificateinfo['obtainthecertificate'] eq 1"> selected="selected" </if>>是</option>-->
+                                                        <!--<option value="0" <if condition="$certificateinfo['obtainthecertificate'] eq 0"> selected="selected" </if>>否</option>-->
+                                                    <!--</select>-->
+                                                <!--</td>-->
+                                            <!--</tr>-->
+                                            <!--<tr>-->
+                                                <!--<th class="tdL">-->
+                                                    <!--证书编号：-->
+                                                <!--</th >-->
+                                                <!--<td >-->
+                                                    <!--<input class="txt" type="text" name ="certificateno" value="{$certificateinfo['certificateno']}/>-->
+                                                <!--</td>-->
+                                                <!--<th class="tdL" >-->
+                                                    <!--获证时间：-->
+                                                <!--</th>-->
+                                                <!--<td >-->
+                                                    <!--<input  class="txt"  name="cert_date"  type="text"  value="<if condition="$certificateinfo['cert_date'] neq ''">{$certificateinfo['certificatedate']|date="Y-m-d",###}</if>"-->
+                                                    <!--readonly="readonly" data-date-format="dd-mm-yyyy"   onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>-->
+                                                <!--</td>-->
+                                            <!--</tr>-->
+                                            <!--<tr>-->
+                                                <!--<th class="tdL">-->
+                                                    <!--证书有效期：-->
+                                                <!--</th>-->
+                                                <!--<td >-->
+                                                    <!--<input  class="txt"  name="certificatevaliditydate"  type="text"  value="<if condition="$certificateinfo['certificatevaliditydate'] neq ''">{$certificateinfo['certificatevaliditydate']|date="Y-m-d",###}</if>"-->
+                                                    <!--readonly="readonly" data-date-format="dd-mm-yyyy" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>-->
+                                                <!--</td>-->
 
-                                                <th class="col-md-2">
-                                                    培训时间：
-                                                </th>
-                                                <td class="col-md-2">
-                                                    <input class="txt" style="width: 40%;" id="trainingtimestart"  type="text"  name="trainingtimestart" value="<if condition="$certificateinfo['trainingtimestart'] neq ''">{$certificateinfo['trainingtimestart']|date="Y-m-d",###}</if>"
-                                                           readonly="readonly" data-date-format="dd-mm-yyyy" onfocus="WdatePicker({maxDate:$('#trainingtimeend').val()})" />
-                                                    -
-                                                    <input  class="txt" style="width: 40%;" id="trainingtimeend" name="trainingtimeend"  type="text" value="<if condition="$certificateinfo['trainingtimeend'] neq ''">{$certificateinfo['trainingtimeend']|date="Y-m-d",###}</if>"
-                                                    readonly="readonly" data-date-format="dd-mm-yyyy"   onfocus="WdatePicker({minDate:$('#trainingtimestart').val()})"/>
-                                                </td>
-                                                <th  class="col-md-2">
-                                                    证书培训类型：
-                                                </th>
-                                                <td  class="4">
-                                                    <select name="certificatetype" require="true">
-                                                        <option value="CISO,CISE" <if condition="$certificateinfo['certificatetype'] eq 'CISO,CISE'"> selected="selected" </if>>CISO,CISE</option>
-                                                        <option value="CISM" <if condition="$certificateinfo['certificatetype'] eq 'CISM'"> selected="selected" </if>>CISM</option>
-                                                        <option value="CISA" <if condition="$certificateinfo['certificatetype'] eq 'CISA'"> selected="selected" </if>>CISA</option>
-                                                    </select>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="tdL" >
-                                                    补考次数：
-                                                </th>
-                                                <td>
-                                                    <input class="txt" data-type="digits" type="text" name ="makeupexam" value="{$certificateinfo['makeupexam']}" />
-                                                </td>
-                                                <th class="tdL">
-                                                    是否获证：
-                                                </th >
-                                                <td>
-                                                    <select name="obtainthecertificate" require="true">
-                                                        <option value="1" <if condition="$certificateinfo['obtainthecertificate'] eq 1"> selected="selected" </if>>是</option>
-                                                        <option value="0" <if condition="$certificateinfo['obtainthecertificate'] eq 0"> selected="selected" </if>>否</option>
-                                                    </select>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="tdL">
-                                                    证书编号：
-                                                </th >
-                                                <td >
-                                                    <input class="txt" type="text" name ="certificateno" value="{$certificateinfo['certificateno']}/>
-                                                </td>
-                                                <th class="tdL" >
-                                                    获证时间：
-                                                </th>
-                                                <td >
-                                                    <input  class="txt"  name="cert_date"  type="text"  value="<if condition="$certificateinfo['cert_date'] neq ''">{$certificateinfo['certificatedate']|date="Y-m-d",###}</if>"
-                                                    readonly="readonly" data-date-format="dd-mm-yyyy"   onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="tdL">
-                                                    证书有效期：
-                                                </th>
-                                                <td >
-                                                    <input  class="txt"  name="certificatevaliditydate"  type="text"  value="<if condition="$certificateinfo['certificatevaliditydate'] neq ''">{$certificateinfo['certificatevaliditydate']|date="Y-m-d",###}</if>"
-                                                    readonly="readonly" data-date-format="dd-mm-yyyy" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
-                                                </td>
-
-                                                <th class="tdL" >
-                                                    维持时间：
-                                                </th>
-                                                <td >
-                                                    <input  class="txt"  name="maintaindate"  type="text"   value="<if condition="$certificateinfo['maintaindate'] neq ''">{$certificateinfo['maintaindate']|date="Y-m-d",###}</if>"
-                                                    readonly="readonly" data-date-format="dd-mm-yyyy" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
-                                                    <!--<input class="txt" name="maintaindate" id="maintaindate" value="<if condition="$certificateinfo['maintaindate'] neq ''">{$certificateinfo['maintaindate']|date="Y-m-d",###}</if>"-->
-                                                    <!--type="text" data-date-format="dd-mm-yyyy" readonly="readonly"  onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>-->
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="tdL" >
-                                                    维持有效期：
-                                                </th>
-                                                <td>
-                                                    <input  class="txt"  name="maintainvaliditydate"  type="text" value="<if condition="$certificateinfo['maintainvaliditydate'] neq ''">{$certificateinfo['maintainvaliditydate']|date="Y-m-d",###}</if>"
-                                                    readonly="readonly" data-date-format="dd-mm-yyyy"  onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
-                                                    <!--<input class="txt" name="maintainvaliditydate" id="maintainvaliditydate" value="<if condition="$certificateinfo['maintainvaliditydate'] neq ''">{$certificateinfo['maintainvaliditydate']|date="Y-m-d",###}</if>"-->
-                                                    <!--type="text" data-date-format="dd-mm-yyyy" readonly="readonly"  onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>-->
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </form>
+                                                <!--<th class="tdL" >-->
+                                                    <!--维持时间：-->
+                                                <!--</th>-->
+                                                <!--<td >-->
+                                                    <!--<input  class="txt"  name="maintaindate"  type="text"   value="<if condition="$certificateinfo['maintaindate'] neq ''">{$certificateinfo['maintaindate']|date="Y-m-d",###}</if>"-->
+                                                    <!--readonly="readonly" data-date-format="dd-mm-yyyy" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>-->
+                                                    <!--&lt;!&ndash;<input class="txt" name="maintaindate" id="maintaindate" value="<if condition="$certificateinfo['maintaindate'] neq ''">{$certificateinfo['maintaindate']|date="Y-m-d",###}</if>"&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;type="text" data-date-format="dd-mm-yyyy" readonly="readonly"  onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>&ndash;&gt;-->
+                                                <!--</td>-->
+                                            <!--</tr>-->
+                                            <!--<tr>-->
+                                                <!--<th class="tdL" >-->
+                                                    <!--维持有效期：-->
+                                                <!--</th>-->
+                                                <!--<td>-->
+                                                    <!--<input  class="txt"  name="maintainvaliditydate"  type="text" value="<if condition="$certificateinfo['maintainvaliditydate'] neq ''">{$certificateinfo['maintainvaliditydate']|date="Y-m-d",###}</if>"-->
+                                                    <!--readonly="readonly" data-date-format="dd-mm-yyyy"  onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>-->
+                                                    <!--&lt;!&ndash;<input class="txt" name="maintainvaliditydate" id="maintainvaliditydate" value="<if condition="$certificateinfo['maintainvaliditydate'] neq ''">{$certificateinfo['maintainvaliditydate']|date="Y-m-d",###}</if>"&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;type="text" data-date-format="dd-mm-yyyy" readonly="readonly"  onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>&ndash;&gt;-->
+                                                <!--</td>-->
+                                            <!--</tr>-->
+                                        <!--</table>-->
+                                    <!--</div>-->
+                                <!--</form>-->
                                 <form class="validator" action="{:U('update_cert_info',array('uid'=>$uid))}" method="post">
                                 <div class="step" id="p5"  <if condition="$flag neq 5">style="display:none"</if>>
                                     <input type="button" class="btn btn-primary btn-sm" style="margin-bottom:10px;"id="btn_addtr1" value="增行">

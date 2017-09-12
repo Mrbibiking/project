@@ -16,15 +16,41 @@ class CourseController extends ComController
 
     public function index()
     {
+        $p = isset($_GET['p']) ? intval($_GET['p']) : '1';
+        $field = isset($_GET['field']) ? $_GET['field'] : '';
+        $keyword = isset($_GET['keyword']) ? htmlentities($_GET['keyword']) : '';
+//        $order = isset($_GET['order']) ? $_GET['order'] : 'DESC';
+        $where = '';
+
+        session('memberedit',null);
+        $prefix = C('DB_PREFIX');
+
+        if ($keyword <> '') {
+            if ($field == 'course_number') {
+                $where = "{$prefix}course_info.course_number LIKE '%$keyword%'";
+            }
+            if ($field == 'course_name') {
+                $where = "{$prefix}course_info.course_name LIKE '%$keyword%'";
+            }
+            if ($field == 'course_description') {
+                $where = "{$prefix}course_info.course_description LIKE '%$keyword%'";
+            }
+            if ($field == 'course_type_number') {
+                $where = "{$prefix}course_info.course_type_number LIKE '%$keyword%'";
+            }
+        }
         $model=M('course_info');
-        $count=$model->count();
-        $page=new \Think\Page($count,10);
-        isset($_GET['p'])?$_GET['p']:1;
-        $list=$model->page($_GET['p'].',3')->select();
+        $pagesize = 10;#每页数量
+        $offset = $pagesize * ($p - 1);//计算记录偏移量
+        $count = $model->field("*") ->where($where)->count();
+        $list = $model->field("*")->where($where)
+            ->limit($offset . ',' . $pagesize)->select();
+
+        $page=new \Think\Page($count,$pagesize);
         $showPage=$page->show();
         $this->assign('page',$showPage);
         $this->assign('data',$list);
-        
+
         $this->display();
     }
     //新增页面
@@ -77,7 +103,7 @@ class CourseController extends ComController
             $this->success('操作成功！',U("index"));
         } else {
             $this->error('操作失败！');
-        }  
+        }
     }
     //删除
     public function del(){
@@ -98,5 +124,5 @@ class CourseController extends ComController
             $this->error('参数错误！');
         }
     }
-    
+
 }

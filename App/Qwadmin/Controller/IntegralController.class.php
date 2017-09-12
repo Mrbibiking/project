@@ -29,12 +29,16 @@ class IntegralController extends ComController
             }
         }
 
-       $user = M('integral_rule');
+        $user = M('integral_rule');
         $pagesize = 10;#每页数量
         $offset = $pagesize * ($p - 1);//计算记录偏移量
-        $count = $user  
+        $count = $user->field("{$prefix}integral_rule.*")
+            ->where($where)
             ->count();
-        $list = $user          
+
+        $list = $user->field("{$prefix}integral_rule.*")
+
+            ->where($where)
             ->limit($offset . ',' . $pagesize)
             ->select();
 
@@ -74,7 +78,7 @@ class IntegralController extends ComController
         }
 
         if (M('integral_rule')->where($map)->delete()) {
-           
+
             addlog('删除积分规则UID：' . $uids);
             $this->success('积分规则删除成功！');
         } else {
@@ -85,11 +89,16 @@ class IntegralController extends ComController
     public function edit()
     {
         $uid = isset($_GET['uid']) ? intval($_GET['uid']) : false;
-     //   printf($uid);
+        //   printf($uid);
         if ($uid) {
+
             session('integraledit','1');
+
+
+            $prefix = C('DB_PREFIX');
             $user = M('integral_rule');
             $integral = $user->field("integral_rule.*")->where("integral_rule.uid=$uid")->find();
+//
         } else {
             $this->error('参数错误！');
         }
@@ -104,7 +113,7 @@ class IntegralController extends ComController
     public function update($ajax = '')
     {
 
-        $uid = isset($_GET['uid']) ? intval($_GET['uid']) : false;   
+        $uid = isset($_GET['uid']) ? intval($_GET['uid']) : false;
 
         $data['integral_rule_type'] = isset($_POST['integral_rule_type']) ? htmlspecialchars($_POST['integral_rule_type'], ENT_QUOTES) :  '';
 
@@ -112,28 +121,28 @@ class IntegralController extends ComController
         $data['integral_value'] = isset($_POST['integral_value']) ? trim($_POST['integral_value']) :  '';
 
 
-       if(!session('integraledit')) {//用于在update中区分是编辑还是添加的标志session,如果是编辑的话就不用考虑名称重复的事情
+        if(!session('integraledit')) {//用于在update中区分是编辑还是添加的标志session,如果是编辑的话就不用考虑名称重复的事情
             $count = M('integral_rule')->where("rule_description = '{$data['rule_description']}'")->count();
             if ($count != 0) {
                 $this->error('积分规则重复！');
             }
 
         }else{
-           $count1 = M('integral_rule')->where("rule_description = '{$data['rule_description']}' and uid<>$uid")->count();
-           if ($count1 != 0) {
-               $this->error('积分规则重复！');
-           }
-       }
+            $count1 = M('integral_rule')->where("rule_description = '{$data['rule_description']}' and uid<>$uid")->count();
+            if ($count1 != 0) {
+                $this->error('积分规则重复！');
+            }
+        }
         session('integraledit',null);//清除用于在update中区分是编辑还是添加的标志session
 
 
         if (!$uid) {
 
             $uid = M('integral_rule')->data($data)->add();
-            
+
             addlog('新增积分规则，会员UID：' . $uid);
         } else {
-           
+
             addlog('编辑积分规则，会员UID：' . $uid);
             M('integral_rule')->data($data)->where("uid=$uid")->save();
 
@@ -142,9 +151,9 @@ class IntegralController extends ComController
         $this->redirect('index');
     }
 
-  public function add()
+    public function add()
     {
         $this->display('form');
     }
-   
+
 }
